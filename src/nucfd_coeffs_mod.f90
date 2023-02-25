@@ -16,8 +16,17 @@ module nucfd_coeffs
   implicit none
 
   private
-
+  public :: coeff_a
+  
   real, parameter, public :: alpha = 1.0 / 3.0 ! Off-diagonal coefficient for first-derivative
                                                ! system.
+
+contains
+
+  pure real function coeff_a()
+
+    coeff_a = 0.0
+    
+  end function coeff_a
   
 end module nucfd_coeffs
