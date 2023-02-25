@@ -19,6 +19,7 @@ module nucfd_trid_solver
   private
 
   public :: solve
+  public :: solve_cyclic
   
 contains
   
@@ -44,6 +45,57 @@ contains
 
   end subroutine solve
 
+  subroutine solve_cyclic(a, b, c, rhs, x)
+    ! Solves a cyclic tridiagonal system using the Thomas algorithm.
+    
+    real, dimension(:), intent(in) :: a   ! The sub-diagonal coefficients vector.
+    real, dimension(:), intent(in) :: b   ! The diagonal coefficients vector.
+    real, dimension(:), intent(in) :: c   ! The super-diagonal coefficients vector.
+    real, dimension(:), intent(in) :: rhs ! The right hand side vector.
+    real, dimension(:), intent(out) :: x  ! The solution vector.
+
+    real, dimension(:), allocatable :: bp   ! The modified diagonal
+    real, dimension(:), allocatable :: q, u ! Vectors of the augmented system
+    real :: v1, vn
+    real :: vx, vq
+    real :: gamma
+
+    integer :: n
+    
+    n = size(x)
+
+    allocate(bp(n), q(n), u(n))
+    
+    ! Create perturbed system
+    bp(:) = b(:)
+    q(:) = 0.0
+    u(:) = 0.0
+
+    gamma = -b(1)
+
+    u(1) = gamma
+    u(n) = c(n)
+
+    v1 = 1.0
+    vn = a(1) / gamma
+
+    bp(1)= bp(1) - gamma
+    bp(n) = bp(n) - a(1) * c(n) / gamma
+    
+    ! Solve perturbed systems
+    call solve(a, bp, c, rhs, x)
+    call solve(a, bp, c, u, q)
+    
+    ! Recontruct the solution
+    vx = (v1 * x(1) + vn * x(n))
+    vq = (v1 * q(1) + vn * q(n))
+
+    x(:) = x(:) - q(:) * (vx / (1.0 + vq))
+    
+    deallocate(bp, q, u)
+    
+  end subroutine solve_cyclic
+  
   pure subroutine forward_sweep(a, b, c, rhs, bp, x)
     ! The forward sweep of the Thomas algorithm.
     

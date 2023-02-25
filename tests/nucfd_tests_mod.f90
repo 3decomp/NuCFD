@@ -91,6 +91,8 @@ contains
     rms = sqrt(sum((test - ref)**2) / real(n))
     if (rms > (2 * epsilon(rms))) then
        test_passing = .false.
+
+       print *, "RMS = ", rms, " exceeds tolerance: ", 2 * epsilon(rms)
        
        fail_ctr = 0
        do i = 1, n
