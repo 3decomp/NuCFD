@@ -76,8 +76,11 @@ program test_tridsolver
 
   use nucfd_tests
   use nucfd_coeffs
+  use nucfd_trid_solver
   
   implicit none
+
+  real, parameter :: pi = 4.0 * atan(1.0)
 
   call initialise_suite("Tridiagonal solver")
 
@@ -97,6 +100,7 @@ contains
     real :: rms
 
     logical :: passing
+    integer :: fail_ctr
     
     passing = .true.
 
@@ -109,13 +113,29 @@ contains
     c(:) = alpha
     do i = 1, n
        x = real(i - 1) * dx
-       ref(i) = cos(x)
+       ref(i) = cos((x / L) * (2 * pi))
     end do
     call compute_rhs(a, b, c, ref, r)
     sol(:) = 0.0
 
+    call solve(a, b, c, r, sol)
+    
     rms = sqrt(sum((sol - ref)**2) / real(n))
-    passing = (rms < (2 * epsilon(rms)))
+    if (rms > (2 * epsilon(rms))) then
+       passing = .false.
+
+       fail_ctr = 0
+       do i = 1, n
+          if (fail_ctr >= 10) then
+             exit
+          end if
+
+          if (abs(sol(i) - ref(i)) > epsilon(rms) * ref(i)) then
+             print *, i, ref(i), sol(i)
+             fail_ctr = fail_ctr + 1
+          end if
+       end do
+    end if
 
     call test_report("Solve 11 system", passing)
     
