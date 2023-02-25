@@ -18,9 +18,9 @@ program verify_coeffs
   
   implicit none
 
-  real :: n
-  real :: L
-  real :: h
+  real :: n ! Mesh size
+  real :: L ! Domain size
+  real :: h ! Average grid spacing.
   
   real :: a
   real, parameter :: aref = 14.0 / 9.0
