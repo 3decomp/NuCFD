@@ -1,8 +1,10 @@
-!!!! tests/tridsolver.f90
+!!!! tests/tridsolver/system_11_symm.f90
 !!!
 !!!! Description
 !!!
-!!! Test suite for the tridiagonal solver.
+!!! Part of the tridsolver test suite.
+!!! Tests the solution of tridiagonal systems arising from compact finite differences of symmetric
+!!! functions.
 !!!
 !!!! LICENSE
 !!!
@@ -16,7 +18,8 @@ module nucfd_tests
   private
   public :: initialise_suite, finalise_suite
   public :: test_report
-
+  public :: check_rms
+  
   character(len=:), allocatable :: suite_name
   logical, save :: passing
   
@@ -69,105 +72,43 @@ contains
     end if
 
   end subroutine test_report
-  
-end module nucfd_tests
 
-program test_tridsolver
+  logical function check_rms(test, ref)
+    ! Compute RMS of error and report errors.
 
-  use nucfd_tests
-  use nucfd_coeffs
-  use nucfd_trid_solver
-  
-  implicit none
+    real, dimension(:), intent(in) :: test ! The test data
+    real, dimension(:), intent(in) :: ref  ! The reference data
 
-  real, parameter :: pi = 4.0 * atan(1.0)
-
-  call initialise_suite("Tridiagonal solver")
-
-  call solve_11_system(33)
-  
-  call finalise_suite()
-
-contains
-
-  subroutine solve_11_system(n)
-
-    integer, intent(in) :: n
-    real, dimension(:), allocatable :: a, b, c, sol, ref, r
-
-    real :: L, x, dx
+    integer :: n
     integer :: i
+
     real :: rms
-
-    logical :: passing
     integer :: fail_ctr
-    
-    passing = .true.
+    logical :: test_passing
 
-    L = 1.0
-    dx = L / real(n - 1)
+    n = size(ref)
     
-    call allocate_system(n, a, b, c, sol, ref)
-    a(:) = alpha
-    b(:) = 1.0
-    c(:) = alpha
-    do i = 1, n
-       x = real(i - 1) * dx
-       ref(i) = cos((x / L) * (2 * pi))
-    end do
-    call compute_rhs(a, b, c, ref, r)
-    sol(:) = 0.0
-
-    call solve(a, b, c, r, sol)
-    
-    rms = sqrt(sum((sol - ref)**2) / real(n))
+    rms = sqrt(sum((test - ref)**2) / real(n))
     if (rms > (2 * epsilon(rms))) then
-       passing = .false.
-
+       test_passing = .false.
+       
        fail_ctr = 0
        do i = 1, n
           if (fail_ctr >= 10) then
              exit
           end if
 
-          if (abs(sol(i) - ref(i)) > epsilon(rms) * ref(i)) then
-             print *, i, ref(i), sol(i)
+          if (abs(test(i) - ref(i)) > epsilon(rms) * ref(i)) then
+             print *, i, ref(i), test(i)
              fail_ctr = fail_ctr + 1
           end if
        end do
+    else
+       test_passing = .true.
     end if
 
-    call test_report("Solve 11 system", passing)
+    check_rms = test_passing
     
-  end subroutine solve_11_system
-
-  subroutine compute_rhs(a, b, c, x, rhs)
-
-    real, dimension(:), intent(in) :: a, b, c, x
-    real, dimension(:), allocatable, intent(out) :: rhs
-
-    integer :: n
-    integer :: i
-
-    n = size(x)
-
-    allocate(rhs(n))
-    
-    rhs(1) = b(1) * x(1) + c(1) * x(2)
-    do i = 2, n - 1
-       rhs(i) = a(i) * x(i - 1) + b(i) * x(i) + c(i) * x(i + 1)
-    end do
-    rhs(n) = a(1) * x(n - 1) + b(n) * x(n)
-
-  end subroutine compute_rhs
+  end function check_rms
   
-  subroutine allocate_system(n, a, b, c, x, xref)
-
-    integer, intent(in) :: n
-    real, dimension(:), allocatable, intent(out) :: a, b, c, x, xref
-
-    allocate(a(n), b(n), c(n), x(n), xref(n))
-    
-  end subroutine allocate_system
-  
-end program test_tridsolver
+end module nucfd_tests
