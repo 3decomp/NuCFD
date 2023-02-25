@@ -22,7 +22,7 @@ target_compile_options(nucfd_strict_flags INTERFACE
   "$<${gcc_like_fc}:-Werror>")
 
 # Library
-add_library(nucfd src/coeffs.f90)
+add_library(nucfd src/nucfd_coeffs_mod.f90)
 target_link_libraries(nucfd nucfd_compiler_flags)
 
 # Testing
