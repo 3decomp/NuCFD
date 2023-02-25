@@ -21,6 +21,10 @@ add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
   "$<${gcc_like_fc}:-Werror>")
 
+# Library
+add_library(nucfd src/coeffs.f90)
+target_link_libraries(nucfd nucfd_compiler_flags)
+
 # Testing
 enable_testing()
 
@@ -31,4 +35,5 @@ target_link_libraries(nucfd_test_flags INTERFACE
 
 add_executable(tridsolver_suite tests/tridsolver.f90)
 target_link_libraries(tridsolver_suite nucfd_test_flags)
+target_link_libraries(tridsolver_suite nucfd)
 add_test(NAME test_tridsolver COMMAND tridsolver_suite)

@@ -71,6 +71,7 @@ end module nucfd_tests
 program test_tridsolver
 
   use nucfd_tests
+  use nucfd_coeffs
   
   implicit none
 
@@ -82,11 +83,41 @@ contains
   logical function solve_11_system(n)
 
     integer, intent(in) :: n
+    real, dimension(:), allocatable :: a, b, c, sol, r
 
+    real :: L, x, dx
+    integer :: i
+    
     solve_11_system = .true.
 
+    dx = L / real(n - 1)
+    
+    call allocate_system(n, a, b, c, sol, r)
+    a(:) = alpha
+    b(:) = 1.0
+    c(:) = alpha
+    do i = 1, n
+       x = real(i - 1) * dx
+       sol(i) = cos(x)
+    end do
+    r(1) = b(1) * sol(1) + c(1) * sol(2)
+    do i = 2, n - 1
+       r(i) = a(i) * sol(i - 1) + b(i) * sol(i) + c(i) * sol(i + 1)
+    end do
+    r(n) = a(1) * sol(n - 1) + b(n) * sol(n)
+    sol(:) = 0.0
+    
     call test_report("Solve 11 system", solve_11_system)
     
   end function solve_11_system
+
+  subroutine allocate_system(n, a, b, c, x, r)
+
+    integer, intent(in) :: n
+    real, dimension(:), allocatable, intent(out) :: a, b, c, x, r
+
+    allocate(a(n), b(n), c(n), x(n), r(n))
+    
+  end subroutine allocate_system
   
 end program test_tridsolver
