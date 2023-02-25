@@ -42,6 +42,10 @@ contains
     call test_report(suite_name)
     print *, "************************************************************************"
 
+    if (.not. passing) then
+       error stop 1
+    end if
+    
   end subroutine finalise_suite
   
   subroutine test_report(test_name, test_status)
@@ -61,7 +65,7 @@ contains
     if (report_status) then
        print *, " "//test_name//": PASS"
     else
-       print *, " "//test_name//": PASS"
+       print *, " "//test_name//": FAIL"
     end if
 
   end subroutine test_report
@@ -76,47 +80,73 @@ program test_tridsolver
   implicit none
 
   call initialise_suite("Tridiagonal solver")
+
+  call solve_11_system(33)
+  
   call finalise_suite()
 
 contains
 
-  logical function solve_11_system(n)
+  subroutine solve_11_system(n)
 
     integer, intent(in) :: n
-    real, dimension(:), allocatable :: a, b, c, sol, r
+    real, dimension(:), allocatable :: a, b, c, sol, ref, r
 
     real :: L, x, dx
     integer :: i
-    
-    solve_11_system = .true.
+    real :: rms
 
+    logical :: passing
+    
+    passing = .true.
+
+    L = 1.0
     dx = L / real(n - 1)
     
-    call allocate_system(n, a, b, c, sol, r)
+    call allocate_system(n, a, b, c, sol, ref)
     a(:) = alpha
     b(:) = 1.0
     c(:) = alpha
     do i = 1, n
        x = real(i - 1) * dx
-       sol(i) = cos(x)
+       ref(i) = cos(x)
     end do
-    r(1) = b(1) * sol(1) + c(1) * sol(2)
-    do i = 2, n - 1
-       r(i) = a(i) * sol(i - 1) + b(i) * sol(i) + c(i) * sol(i + 1)
-    end do
-    r(n) = a(1) * sol(n - 1) + b(n) * sol(n)
+    call compute_rhs(a, b, c, ref, r)
     sol(:) = 0.0
-    
-    call test_report("Solve 11 system", solve_11_system)
-    
-  end function solve_11_system
 
-  subroutine allocate_system(n, a, b, c, x, r)
+    rms = sqrt(sum((sol - ref)**2) / real(n))
+    passing = (rms < (2 * epsilon(rms)))
+
+    call test_report("Solve 11 system", passing)
+    
+  end subroutine solve_11_system
+
+  subroutine compute_rhs(a, b, c, x, rhs)
+
+    real, dimension(:), intent(in) :: a, b, c, x
+    real, dimension(:), allocatable, intent(out) :: rhs
+
+    integer :: n
+    integer :: i
+
+    n = size(x)
+
+    allocate(rhs(n))
+    
+    rhs(1) = b(1) * x(1) + c(1) * x(2)
+    do i = 2, n - 1
+       rhs(i) = a(i) * x(i - 1) + b(i) * x(i) + c(i) * x(i + 1)
+    end do
+    rhs(n) = a(1) * x(n - 1) + b(n) * x(n)
+
+  end subroutine compute_rhs
+  
+  subroutine allocate_system(n, a, b, c, x, xref)
 
     integer, intent(in) :: n
-    real, dimension(:), allocatable, intent(out) :: a, b, c, x, r
+    real, dimension(:), allocatable, intent(out) :: a, b, c, x, xref
 
-    allocate(a(n), b(n), c(n), x(n), r(n))
+    allocate(a(n), b(n), c(n), x(n), xref(n))
     
   end subroutine allocate_system
   
