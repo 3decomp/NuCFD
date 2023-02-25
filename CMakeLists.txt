@@ -12,16 +12,19 @@ cmake_minimum_required(VERSION 3.16)
 project(NuCFD)
 enable_language(Fortran)
 
-# Set compiler flags using interface library
+# Set compiler flags using interface libraries
 set(gcc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,GNU>")
 add_library(nucfd_compiler_flags INTERFACE)
 target_compile_options(nucfd_compiler_flags INTERFACE
-  "$<${gcc_like_fc}:-Wall;-Wextra;-Wimplicit-interface;-Wimplicit-procedure>")
+  "$<${gcc_like_fc}:-std=f2008;-Wall;-Wextra;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>")
+add_library(nucfd_debug_flags INTERFACE)
+target_compile_options(nucfd_debug_flags INTERFACE
+  "$<${gcc_like_fc}:-ffpe-trap=invalid,zero;-fcheck=bounds>")
 add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
   "$<${gcc_like_fc}:-Werror>")
 
-# Library
+# Build nucfd library
 add_library(nucfd src/nucfd_coeffs_mod.f90)
 target_link_libraries(nucfd nucfd_compiler_flags)
 
@@ -31,6 +34,7 @@ enable_testing()
 add_library(nucfd_test_flags INTERFACE)
 target_link_libraries(nucfd_test_flags INTERFACE
   nucfd_compiler_flags
+  nucfd_debug_flags
   nucfd_strict_flags)
 
 add_executable(tridsolver_suite tests/tridsolver.f90)
