@@ -13,6 +13,9 @@
 !!!
 
 module nucfd_trid_solver
+  !! Module implementing a simple tridiagonal solver based on the algorithm given at
+  !! https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm including support for cyclic
+  !! systems.
 
   implicit none
 
@@ -24,13 +27,13 @@ module nucfd_trid_solver
 contains
   
   subroutine solve(a, b, c, rhs, x)
-    ! Solves a tridiagonal system using the Thomas algorithm.
+    !! Solves a tridiagonal system using the Thomas algorithm.
     
-    real, dimension(:), intent(in) :: a   ! The sub-diagonal coefficients vector.
-    real, dimension(:), intent(in) :: b   ! The diagonal coefficients vector.
-    real, dimension(:), intent(in) :: c   ! The super-diagonal coefficients vector.
-    real, dimension(:), intent(in) :: rhs ! The right hand side vector.
-    real, dimension(:), intent(out) :: x  ! The solution vector.
+    real, dimension(:), intent(in) :: a   !! The sub-diagonal coefficients vector.
+    real, dimension(:), intent(in) :: b   !! The diagonal coefficients vector.
+    real, dimension(:), intent(in) :: c   !! The super-diagonal coefficients vector.
+    real, dimension(:), intent(in) :: rhs !! The right hand side vector.
+    real, dimension(:), intent(out) :: x  !! The solution vector.
 
     real, dimension(:), allocatable :: bp ! The modified diagonal.
 
@@ -46,13 +49,15 @@ contains
   end subroutine solve
 
   subroutine solve_cyclic(a, b, c, rhs, x)
-    ! Solves a cyclic tridiagonal system using the Thomas algorithm.
+    !! Solves a cyclic tridiagonal system using the Thomas algorithm. This creates and solves a
+    !! perturbed by applying the Shermann-Morrison formula, as described at
+    !! https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
     
-    real, dimension(:), intent(in) :: a   ! The sub-diagonal coefficients vector.
-    real, dimension(:), intent(in) :: b   ! The diagonal coefficients vector.
-    real, dimension(:), intent(in) :: c   ! The super-diagonal coefficients vector.
-    real, dimension(:), intent(in) :: rhs ! The right hand side vector.
-    real, dimension(:), intent(out) :: x  ! The solution vector.
+    real, dimension(:), intent(in) :: a   !! The sub-diagonal coefficients vector.
+    real, dimension(:), intent(in) :: b   !! The diagonal coefficients vector.
+    real, dimension(:), intent(in) :: c   !! The super-diagonal coefficients vector.
+    real, dimension(:), intent(in) :: rhs !! The right hand side vector.
+    real, dimension(:), intent(out) :: x  !! The solution vector.
 
     real, dimension(:), allocatable :: bp   ! The modified diagonal
     real, dimension(:), allocatable :: q, u ! Vectors of the augmented system
@@ -97,14 +102,14 @@ contains
   end subroutine solve_cyclic
   
   pure subroutine forward_sweep(a, b, c, rhs, bp, x)
-    ! The forward sweep of the Thomas algorithm.
+    !! The forward sweep of the Thomas algorithm.
     
-    real, dimension(:), intent(in) :: a   ! The sub-diagonal coefficients vector.
-    real, dimension(:), intent(in) :: b   ! The diagonal coefficients vector.
-    real, dimension(:), intent(in) :: c   ! The super-diagonal coefficients vector.
-    real, dimension(:), intent(in) :: rhs ! The right hand side vector.
-    real, dimension(:), intent(out) :: bp ! The modified diagonal
-    real, dimension(:), intent(out) :: x  ! The solution vector.
+    real, dimension(:), intent(in) :: a   !! The sub-diagonal coefficients vector.
+    real, dimension(:), intent(in) :: b   !! The diagonal coefficients vector.
+    real, dimension(:), intent(in) :: c   !! The super-diagonal coefficients vector.
+    real, dimension(:), intent(in) :: rhs !! The right hand side vector.
+    real, dimension(:), intent(out) :: bp !! The modified diagonal
+    real, dimension(:), intent(out) :: x  !! The solution vector.
 
     integer :: n
     integer :: i
@@ -123,11 +128,11 @@ contains
   end subroutine forward_sweep
 
   pure subroutine backward_sweep(bp, c, x)
-    ! The backward sweep of the Thomas algorithm.
+    !! The backward sweep of the Thomas algorithm.
 
-    real, dimension(:), intent(in) :: bp   ! The modified diagonal
-    real, dimension(:), intent(in) :: c    ! The super-diagonal coefficients vector.
-    real, dimension(:), intent(inout) :: x ! The solution vector.
+    real, dimension(:), intent(in) :: bp   !! The modified diagonal
+    real, dimension(:), intent(in) :: c    !! The super-diagonal coefficients vector.
+    real, dimension(:), intent(inout) :: x !! The solution vector.
 
     integer :: n
     integer :: i
