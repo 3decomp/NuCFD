@@ -25,9 +25,10 @@ program verify_coeffs
   real :: L ! Domain size
   real :: h ! Average grid spacing.
   
-  real :: a, b
+  real :: a, b, c
   real, parameter :: aref = 14.0 / 9.0
   real, parameter :: bref = -aref
+  real, parameter :: cref = 1.0 / 9.0
   
   call initialise_suite("Verify coefficients")
 
@@ -49,7 +50,9 @@ program verify_coeffs
   call test_report("Coefficient A", check_scalar(a, aref / (2.0 * h)))
   b = coeff_b(stencil)
   call test_report("Coefficient B", check_scalar(b, bref / (2.0 * h)))
-
+  c = coeff_c(stencil)
+  call test_report("Coefficient C", check_scalar(c, cref / (4.0 * h)))
+  
   stencil%stencil(-3) = -5.0 * h
   stencil%stencil(2)  = +3.0 * h
   a = coeff_a(stencil)
