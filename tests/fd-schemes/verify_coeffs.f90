@@ -1,16 +1,9 @@
-!!!! tests/fd-schemes/verify_coeffs.f90
-!!!
-!!!! Description
-!!!
-!!! Part of the fd-schemes test suite.
-!!! Tests the computation of finite difference coefficients for non-uniform grids.
-!!!
-!!!! LICENSE
-!!!
-!!! SPDX-License-Identifier: BSD-3-Clause
-!!!
-
 program verify_coeffs
+  !! Tests the computation of finite difference coefficients for non-uniform grids.
+  !!
+  !! Part of the fd-schemes test suite.
+  !!
+  !! SPDX-License-Identifier: BSD-3-Clause
 
   use nucfd_types
   use nucfd_coeffs

@@ -15,21 +15,25 @@ module nucfd_coeffs
   public :: coeff_e
 
   interface coeff_a
+     !! Compute the coefficient acting on f_{i+1} of the finite diference stencil.
      module procedure coeff_a_points
      module procedure coeff_a_deltas
   end interface coeff_a
 
   interface coeff_b
+     !! Compute the coefficient acting on f_{i-1} of the finite diference stencil.
      module procedure coeff_b_points
      module procedure coeff_b_deltas
   end interface coeff_b
 
   interface coeff_c
+     !! Compute the coefficient acting on f_{i+2} of the finite diference stencil.
      module procedure coeff_c_points
      module procedure coeff_c_deltas
   end interface coeff_c
 
   interface coeff_d
+     !! Compute the coefficient acting on f_{i-2} of the finite diference stencil.
      module procedure coeff_d_points
      module procedure coeff_d_deltas
   end interface coeff_d

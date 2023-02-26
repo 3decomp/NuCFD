@@ -1,17 +1,7 @@
-!!!! src/nucfd_types_mod.f90
-!!!
-!!!! Description
-!!!
-!!! Defines the custom types used by NuCFD.
-!!!
-!!! Provides the nucfd_types module.
-!!!
-!!!! LICENSE
-!!!
-!!! SPDX-License-Identifier: BSD-3-Clause
-!!!
-
 module nucfd_types
+  !! Module defining the custom types used by NuCFD.
+  !!
+  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 

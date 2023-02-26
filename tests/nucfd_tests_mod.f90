@@ -69,10 +69,10 @@ contains
   end subroutine test_report
 
   logical function check_scalar(test, ref)
-    ! Compute error and report errors.
+    !! Compute error and report for scalar values.
 
-    real, intent(in) :: test ! The test data
-    real, intent(in) :: ref  ! The reference data
+    real, intent(in) :: test !! The test data
+    real, intent(in) :: ref  !! The reference data
 
     real :: err
     logical :: test_passing
@@ -93,8 +93,8 @@ contains
   logical function check_rms(test, ref)
     !! Compute RMS of error and report errors.
 
-    real, dimension(:), intent(in) :: test ! The test data
-    real, dimension(:), intent(in) :: ref  ! The reference data
+    real, dimension(:), intent(in) :: test !! The test data
+    real, dimension(:), intent(in) :: ref  !! The reference data
 
     integer :: n
     integer :: i
