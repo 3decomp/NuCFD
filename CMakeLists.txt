@@ -30,7 +30,7 @@ add_library(nucfd_debug_flags INTERFACE)
 target_compile_options(nucfd_debug_flags INTERFACE
   "$<${gcc_like_fc}:-g;-Og;-ffpe-trap=invalid,zero;-fcheck=bounds;-fbacktrace>"
   "$<${icc_like_fc}:-g;-O0;-check;all;-fpe0;-traceback;-init:snan,arrays>"
-  "$<${cray_like_fc}:-G2;-O0;-R;bc;-ei")
+  "$<${cray_like_fc}:-G2;-O0;-R;bc;-ei>")
 add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
   "$<${gcc_like_fc}:-Werror;-Wno-error=integer-division>"
