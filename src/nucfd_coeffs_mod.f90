@@ -23,6 +23,7 @@ module nucfd_coeffs
   public :: coeff_b
   public :: coeff_c
   public :: coeff_d
+  public :: coeff_e
 
   interface coeff_a
      module procedure coeff_a_points
@@ -141,7 +142,7 @@ contains
   end function coeff_c_points
 
   pure real function coeff_c_deltas(h)
-    !! Compute the coefficient acting on f_{i+21} of the finite diference given a stencil of grid
+    !! Compute the coefficient acting on f_{i+2} of the finite diference given a stencil of grid
     !! spacings.
 
     type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
@@ -164,7 +165,7 @@ contains
   end function coeff_c_deltas
 
   real function coeff_d_points(x)
-    !! Compute the coefficient acting on f_{i+2} of the finite diference given a stencil of points.
+    !! Compute the coefficient acting on f_{i-2} of the finite diference given a stencil of points.
 
     type(nucfd_stencil_points), intent(in) :: x !! Stencil of points for the finite
                                                 !! difference.
@@ -177,7 +178,7 @@ contains
   end function coeff_d_points
 
   pure real function coeff_d_deltas(h)
-    !! Compute the coefficient acting on f_{i+21} of the finite diference given a stencil of grid
+    !! Compute the coefficient acting on f_{i-2} of the finite diference given a stencil of grid
     !! spacings.
 
     type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
@@ -198,5 +199,21 @@ contains
            / (hm1 * (hm1 + h0) * (hm1 + h0 + hp1) * (hm1 + h0 + hp1 + hp2))
     end associate
   end function coeff_d_deltas
-  
+
+  real function coeff_e(x)
+    !! Compute the coefficient acting on f_{i} of the finite diference given a stencil of points.
+
+    type(nucfd_stencil_points), intent(in) :: x !! Stencil of points for the finite
+                                                !! difference.
+
+    real :: a, b, c, d ! The neighbouring coefficients
+
+    a = coeff_a(x)
+    b = coeff_b(x)
+    c = coeff_c(x)
+    d = coeff_d(x)
+
+    coeff_e = -(a + b + c + d)
+    
+  end function coeff_e
 end module nucfd_coeffs

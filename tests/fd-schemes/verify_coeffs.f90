@@ -56,6 +56,8 @@ program verify_coeffs
   call test_report("Coefficient C", check_scalar(c, cref / (4.0 * h)))
   d = coeff_d(stencil)
   call test_report("Coefficient D", check_scalar(d, dref / (4.0 * h)))
+  e = coeff_e(stencil)
+  call test_report("Coefficient E", check_scalar(e, eref))
   
   stencil%stencil(-3) = -5.0 * h
   stencil%stencil(2)  = +3.0 * h
