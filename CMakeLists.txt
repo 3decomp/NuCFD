@@ -20,17 +20,21 @@ set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_INCLUDEDI
 ## Set compiler flags using interface libraries
 set(gcc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,GNU>")
 set(icc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,Intel>")
+set(cray_like_fc "$<COMPILE_LANG_AND_ID:Fortran,Cray>")
 add_library(nucfd_compiler_flags INTERFACE)
 target_compile_options(nucfd_compiler_flags INTERFACE
   "$<${gcc_like_fc}:-std=f2018;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
-  "$<${icc_like_fc}:-std18;-warn;all>")
+  "$<${icc_like_fc}:-std18;-warn;all>"
+  "$<${cray_like_fc}:-en;-emf;-eI>")
 add_library(nucfd_debug_flags INTERFACE)
 target_compile_options(nucfd_debug_flags INTERFACE
   "$<${gcc_like_fc}:-g;-Og;-ffpe-trap=invalid,zero;-fcheck=bounds;-fbacktrace>"
-  "$<${icc_like_fc}:-g;-O0;-check;all;-fpe0;-traceback;-init:snan,arrays>")
+  "$<${icc_like_fc}:-g;-O0;-check;all;-fpe0;-traceback;-init:snan,arrays>"
+  "$<${cray_like_fc}:-G2;-O0;-R;bc;-ei>")
 add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
-  "$<${gcc_like_fc}:-Werror;-Wno-error=integer-division>")
+  "$<${gcc_like_fc}:-Werror;-Wno-error=integer-division>"
+  "$<${cray_like_fc}:-eN>")
 
 ## Build nucfd library
 add_library(nucfd
