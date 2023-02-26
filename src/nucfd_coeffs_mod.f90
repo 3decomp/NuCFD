@@ -12,12 +12,13 @@
 !!!
 
 module nucfd_coeffs
-
+  !! Module defining the coefficients for compact finite differenceschemes on non-uniform grids.
+  
   implicit none
 
   private
 
-  real, parameter, public :: alpha = 1.0 / 3.0 ! Off-diagonal coefficient for first-derivative
-                                               ! system.
+  real, parameter, public :: alpha = 1.0 / 3.0 !! Off-diagonal coefficient for first derivative
+                                               !! system.
   
 end module nucfd_coeffs

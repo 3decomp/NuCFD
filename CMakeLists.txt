@@ -65,3 +65,8 @@ define_test(tridsolver system_00_symm nucfd_test_framework)
 define_test(tridsolver system_00_anti-symm)
 add_test_libs(tridsolver system_00_symm trid_test_utils)
 add_test_libs(tridsolver system_00_anti-symm trid_test_utils)
+
+## Documentation
+add_custom_target(doc ford
+  ${CMAKE_SOURCE_DIR}/NuCFD.md
+  -d ${CMAKE_SOURCE_DIR}/src)
