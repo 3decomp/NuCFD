@@ -1,18 +1,7 @@
-!!!! src/nucfd_coeffs_mod.f90
-!!!
-!!!! Description
-!!!
-!!! Defines the coefficients for compact finite difference schemes on non-uniform grids.
-!!!
-!!! Provides the nucfd_coeffs module.
-!!!
-!!!! LICENSE
-!!!
-!!! SPDX-License-Identifier: BSD-3-Clause
-!!!
-
 module nucfd_coeffs
-  !! Module defining the coefficients for compact finite differenceschemes on non-uniform grids.
+  !! Module defining the coefficients for compact finite difference schemes on non-uniform grids.
+  !!
+  !! SPDX-License-Identifier: BSD-3-Clause
 
   use nucfd_types
   

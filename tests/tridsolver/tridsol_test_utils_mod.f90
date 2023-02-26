@@ -1,18 +1,9 @@
-!!!! tests/tridsolver/tridsol_test_utils_mod.f90
-!!!
-!!!! Description
-!!!
-!!! Part of the tridsolver test suite.
-!!! Defines utility functions for the tridiagonal solver test suite.
-!!!
-!!! Provides tridsol_test_utils module.
-!!!
-!!!! LICENSE
-!!!
-!!! SPDX-License-Identifier: BSD-3-Clause
-!!!
-
 module tridsol_test_utils
+  !! Module defining utility functions for the tridiagonal solver test suite.
+  !!
+  !! Part of the tridsolver test suite.
+  !!
+  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 
@@ -24,6 +15,7 @@ module tridsol_test_utils
 contains
 
   subroutine compute_rhs(a, b, c, x, rhs)
+    !! Computes the right hand side (i.e. residual) of a tridiagonal system for a given solution.
 
     real, dimension(:), intent(in) :: a, b, c, x
     real, dimension(:), allocatable, intent(out) :: rhs
@@ -44,7 +36,8 @@ contains
   end subroutine compute_rhs
   
   subroutine allocate_system(n, a, b, c, x, xref)
-
+    !! Allocates a tridiagonal system.
+    
     integer, intent(in) :: n
     real, dimension(:), allocatable, intent(out) :: a, b, c, x, xref
 
