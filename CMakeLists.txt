@@ -22,8 +22,8 @@ set(gcc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,GNU>")
 set(icc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,Intel>")
 add_library(nucfd_compiler_flags INTERFACE)
 target_compile_options(nucfd_compiler_flags INTERFACE
-  "$<${gcc_like_fc}:-std=f2008;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
-  "$<${icc_like_fc}:-std08;-warn;all>")
+  "$<${gcc_like_fc}:-std=f2018;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
+  "$<${icc_like_fc}:-std18;-warn;all>")
 add_library(nucfd_debug_flags INTERFACE)
 target_compile_options(nucfd_debug_flags INTERFACE
   "$<${gcc_like_fc}:-g;-Og;-ffpe-trap=invalid,zero;-fcheck=bounds;-fbacktrace>"
