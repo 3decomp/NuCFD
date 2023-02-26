@@ -24,7 +24,7 @@ target_compile_options(nucfd_compiler_flags INTERFACE
   "$<${gcc_like_fc}:-std=f2008;-Wall;-Wextra;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>")
 add_library(nucfd_debug_flags INTERFACE)
 target_compile_options(nucfd_debug_flags INTERFACE
-  "$<${gcc_like_fc}:-ffpe-trap=invalid,zero;-fcheck=bounds>")
+  "$<${gcc_like_fc}:-ffpe-trap=invalid,zero;-fcheck=bounds;-fbacktrace>")
 add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
   "$<${gcc_like_fc}:-Werror>")
@@ -35,6 +35,9 @@ add_library(nucfd
   src/nucfd_types_mod.f90
   src/nucfd_coeffs_mod.f90)
 target_link_libraries(nucfd nucfd_compiler_flags)
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+  target_link_libraries(nucfd nucfd_debug_flags)
+endif()
 
 ## Testing
 enable_testing()
