@@ -25,6 +25,7 @@ program test_system_11_symm
 contains
 
   subroutine solve_11_system(n)
+    !! Build and solve a system of size n.
 
     integer, intent(in) :: n
     real, dimension(:), allocatable :: a, b, c, sol, ref, r

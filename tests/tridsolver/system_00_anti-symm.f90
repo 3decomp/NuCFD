@@ -25,7 +25,8 @@ program test_system_00_anti_symm
 contains
 
   subroutine solve_00_system(n)
-
+    !! Build and solve a periodic system of size n.
+    
     integer, intent(in) :: n
     real, dimension(:), allocatable :: a, b, c, sol, ref, r
 

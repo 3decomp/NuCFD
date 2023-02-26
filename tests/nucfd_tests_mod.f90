@@ -17,7 +17,8 @@ module nucfd_tests
 contains
 
   subroutine initialise_suite(test_suite_name)
-
+    !! Initialises the test suite, assigning a name and setting the initial status to PASS.
+    
     character(len=*), intent(in) :: test_suite_name
 
     suite_name = test_suite_name
@@ -31,7 +32,8 @@ contains
   end subroutine initialise_suite
 
   subroutine finalise_suite()
-  
+    !! Finalises a test suite, reporting on the overall status of the suite.
+    
     print *, "------------------------------------------------------------------------"
     call test_report(suite_name)
     print *, "************************************************************************"
@@ -43,7 +45,8 @@ contains
   end subroutine finalise_suite
   
   subroutine test_report(test_name, test_status)
-
+    !! Given a test name and status, reports as PASS/FAIL.
+    
     character(len=*), intent(in) :: test_name
     logical, intent(in), optional :: test_status
 
@@ -65,7 +68,7 @@ contains
   end subroutine test_report
 
   logical function check_rms(test, ref)
-    ! Compute RMS of error and report errors.
+    !! Compute RMS of error and report errors.
 
     real, dimension(:), intent(in) :: test ! The test data
     real, dimension(:), intent(in) :: ref  ! The reference data
