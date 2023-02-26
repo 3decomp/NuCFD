@@ -19,12 +19,15 @@ set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_INCLUDEDI
 
 ## Set compiler flags using interface libraries
 set(gcc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,GNU>")
+set(icc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,Intel>")
 add_library(nucfd_compiler_flags INTERFACE)
 target_compile_options(nucfd_compiler_flags INTERFACE
-  "$<${gcc_like_fc}:-std=f2008;-Wall;-Wextra;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>")
+  "$<${gcc_like_fc}:-std=f2008;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
+  "$<${icc_like_fc}:-std08;-warn;all>")
 add_library(nucfd_debug_flags INTERFACE)
 target_compile_options(nucfd_debug_flags INTERFACE
-  "$<${gcc_like_fc}:-ffpe-trap=invalid,zero;-fcheck=bounds>")
+  "$<${gcc_like_fc}:-g;-Og;-ffpe-trap=invalid,zero;-fcheck=bounds>"
+  "$<${icc_like_fc}:-g;-O0;-check;all;-fpe0;-traceback;-init:snan,arrays>")
 add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
   "$<${gcc_like_fc}:-Werror>")
