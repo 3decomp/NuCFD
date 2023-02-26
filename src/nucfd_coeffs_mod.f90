@@ -22,6 +22,7 @@ module nucfd_coeffs
   public :: coeff_a
   public :: coeff_b
   public :: coeff_c
+  public :: coeff_d
 
   interface coeff_a
      module procedure coeff_a_points
@@ -37,6 +38,11 @@ module nucfd_coeffs
      module procedure coeff_c_points
      module procedure coeff_c_deltas
   end interface coeff_c
+
+  interface coeff_d
+     module procedure coeff_d_points
+     module procedure coeff_d_deltas
+  end interface coeff_d
   
   real, parameter, public :: alpha = 1.0 / 3.0 !! Off-diagonal coefficient for first derivative
                                                !! system.
@@ -156,5 +162,41 @@ contains
            / (hp2 * (hp1 + hp2) * (h0 + hp1 + hp2) * (hm1 + h0 + hp1 + hp2))
     end associate
   end function coeff_c_deltas
+
+  real function coeff_d_points(x)
+    !! Compute the coefficient acting on f_{i+2} of the finite diference given a stencil of points.
+
+    type(nucfd_stencil_points), intent(in) :: x !! Stencil of points for the finite
+                                                !! difference.
+
+    type(nucfd_stencil_deltas) :: h  ! Stencil of grid spacings for the finite difference.
+    
+    h = points_to_deltas(x)
+    coeff_d_points = coeff_d_deltas(h)
+    
+  end function coeff_d_points
+
+  pure real function coeff_d_deltas(h)
+    !! Compute the coefficient acting on f_{i+21} of the finite diference given a stencil of grid
+    !! spacings.
+
+    type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
+
+    real :: hm2, hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
+
+    hm2 = h%stencil(-2)
+    hm1 = h%stencil(-1)
+    h0 = h%stencil(0)
+    hp1 = h%stencil(1)
+    hp2 = h%stencil(2)
+
+    associate(beta => alpha) ! To match Gamet et al. (1999)
+      coeff_d_deltas = h0 * hp1**2 + h0 * hp1 * hp2 - h0**3 * alpha - 2.0 * h0**2 * hp1 * alpha &
+           - h0 * hp1**2 * alpha - h0**2 * hp2 * alpha - h0 * hp1 * hp2 * alpha & ! End line 1
+           - h0 * hp1 * hp2 * beta - hp1**2 * hp2 * beta ! End line 2
+      coeff_d_deltas = coeff_d_deltas &
+           / (hm1 * (hm1 + h0) * (hm1 + h0 + hp1) * (hm1 + h0 + hp1 + hp2))
+    end associate
+  end function coeff_d_deltas
   
 end module nucfd_coeffs
