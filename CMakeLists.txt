@@ -78,6 +78,10 @@ add_test_libs(tridsolver system_00_anti-symm trid_test_utils)
 # Finite difference test suite
 define_test(fd-schemes verify_coeffs)
 
+## Examples
+add_executable(compute_derivatives examples/compute-derivatives.f90)
+target_link_libraries(compute_derivatives nucfd)
+
 ## Documentation
 add_custom_target(doc ford
   ${CMAKE_SOURCE_DIR}/NuCFD.md
