@@ -67,4 +67,6 @@ add_test_libs(tridsolver system_00_symm trid_test_utils)
 add_test_libs(tridsolver system_00_anti-symm trid_test_utils)
 
 ## Documentation
-add_custom_target(doc ford ${CMAKE_SOURCE_DIR}/NuCFD.md)
+add_custom_target(doc ford
+  ${CMAKE_SOURCE_DIR}/README.md
+  -d ${CMAKE_SOURCE_DIR}/src)
