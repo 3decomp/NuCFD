@@ -19,7 +19,7 @@ program verify_coeffs
   
   implicit none
 
-  type(nucfd_stencil_points(6, 4)) :: stencil ! Stencil of grid points.
+  type(nucfd_stencil_points) :: stencil ! Stencil of grid points.
   
   real :: n ! Mesh size
   real :: L ! Domain size
@@ -33,6 +33,16 @@ program verify_coeffs
   n = 128
   L = 1.0
   h = L / real(n - 1)
+
+  call create_stencil(6, 4, stencil)
+  
+  stencil%stencil(:) = 0.0
+  stencil%stencil(-3) = -3.0 * h
+  stencil%stencil(-2) = -2.0 * h
+  stencil%stencil(-1) = -1.0 * h
+  stencil%stencil(0) = 0.0
+  stencil%stencil(1) = +1.0 * h
+  stencil%stencil(2) = +2.0 * h
   
   a = coeff_a(stencil)
   call test_report("Coefficient A", check_scalar(a, aref / (2.0 * h)))
