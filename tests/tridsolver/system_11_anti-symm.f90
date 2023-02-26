@@ -1,17 +1,10 @@
-!!!! tests/tridsolver/system_11_anti-symm.f90
-!!!
-!!!! Description
-!!!
-!!! Part of the tridsolver test suite.
-!!! Tests the solution of tridiagonal systems arising from compact finite differences of
-!!! anti-symmetric functions.
-!!!
-!!!! LICENSE
-!!!
-!!! SPDX-License-Identifier: BSD-3-Clause
-!!!
-
 program test_system_11_anti_symm
+  !! Tests the solution of tridiagonal systems arising from compact finite differences of
+  !! anti-symmetric functions.
+  !!
+  !! Part of the tridsolver test suite.
+  !!
+  !! SPDX-License-Identifier: BSD-3-Clause
 
   use nucfd_coeffs
   use nucfd_trid_solver

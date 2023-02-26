@@ -1,17 +1,8 @@
-!!!! tests/tridsolver/system_11_symm.f90
-!!!
-!!!! Description
-!!!
-!!! Part of the tridsolver test suite.
-!!! Tests the solution of tridiagonal systems arising from compact finite differences of symmetric
-!!! functions.
-!!!
-!!!! LICENSE
-!!!
-!!! SPDX-License-Identifier: BSD-3-Clause
-!!!
-
 module nucfd_tests
+  !! NuCFD test module, enables defining test suites, reporting results of tests and overall status
+  !! of the suite, and provides utilities for checking floating-point numbers.
+  !!
+  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 
