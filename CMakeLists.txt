@@ -25,7 +25,7 @@ add_library(nucfd_compiler_flags INTERFACE)
 target_compile_options(nucfd_compiler_flags INTERFACE
   "$<${gcc_like_fc}:-std=f2018;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
   "$<${icc_like_fc}:-std18;-warn;all>"
-  "$<${cray_like_fc}:-en;-emf;-eI>")
+  "$<${cray_like_fc}:-hfp0;-en;-emf;-eI>") # Anything greater than fp0 fails tests!
 add_library(nucfd_debug_flags INTERFACE)
 target_compile_options(nucfd_debug_flags INTERFACE
   "$<${gcc_like_fc}:-g;-Og;-ffpe-trap=invalid,zero;-fcheck=bounds;-fbacktrace>"
