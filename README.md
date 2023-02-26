@@ -1,4 +1,5 @@
-`NuCFD` is a library implementing compact finite difference schemes on non-uniform grids.
+`NuCFD`, for Non-uniform Compact Finite Differences, is a library implementing compact finite
+difference schemes on non-uniform grids.
 
 ## Building
 
