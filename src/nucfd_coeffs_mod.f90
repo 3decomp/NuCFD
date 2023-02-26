@@ -64,11 +64,16 @@ contains
 
     real :: hm2, hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
 
-    hm2 = h%stencil(-2)
-    hm1 = h%stencil(-1)
-    h0 = h%stencil(0)
-    hp1 = h%stencil(1)
-    hp2 = h%stencil(2)
+    select type(deltas => h%stencil)
+    type is(real)
+       hm2 = deltas(-2)
+       hm1 = deltas(-1)
+       h0 = deltas(0)
+       hp1 = deltas(1)
+       hp2 = deltas(2)
+    class default
+       error stop
+    end select
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
       coeff_a_deltas = hm1 * h0 * hp1 + h0**2 * hp1 + hm1 * h0 * hp2 + h0**2 * hp2 &
@@ -103,11 +108,16 @@ contains
 
     real :: hm2, hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
 
-    hm2 = h%stencil(-2)
-    hm1 = h%stencil(-1)
-    h0 = h%stencil(0)
-    hp1 = h%stencil(1)
-    hp2 = h%stencil(2)
+    select type(deltas => h%stencil)
+    type is(real)
+       hm2 = deltas(-2)
+       hm1 = deltas(-1)
+       h0 = deltas(0)
+       hp1 = deltas(1)
+       hp2 = deltas(2)
+    class default
+       error stop
+    end select
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
       coeff_b_deltas = -hm1 * hp1**2 - h0 * hp1**2 - hm1 * hp1 * hp2 - h0 * hp1 * hp2 &
@@ -142,11 +152,16 @@ contains
 
     real :: hm2, hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
 
-    hm2 = h%stencil(-2)
-    hm1 = h%stencil(-1)
-    h0 = h%stencil(0)
-    hp1 = h%stencil(1)
-    hp2 = h%stencil(2)
+    select type(deltas => h%stencil)
+    type is(real)
+       hm2 = deltas(-2)
+       hm1 = deltas(-1)
+       h0 = deltas(0)
+       hp1 = deltas(1)
+       hp2 = deltas(2)
+    class default
+       error stop
+    end select
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
       coeff_c_deltas = -hm1 * h0 * hp1 - h0**2 * hp1 + hm1 * h0**2 * alpha &
@@ -178,11 +193,16 @@ contains
 
     real :: hm2, hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
 
-    hm2 = h%stencil(-2)
-    hm1 = h%stencil(-1)
-    h0 = h%stencil(0)
-    hp1 = h%stencil(1)
-    hp2 = h%stencil(2)
+    select type(deltas => h%stencil)
+    type is(real)
+       hm2 = deltas(-2)
+       hm1 = deltas(-1)
+       h0 = deltas(0)
+       hp1 = deltas(1)
+       hp2 = deltas(2)
+    class default
+       error stop
+    end select
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
       coeff_d_deltas = h0 * hp1**2 + h0 * hp1 * hp2 - h0**3 * alpha - 2.0 * h0**2 * hp1 * alpha &

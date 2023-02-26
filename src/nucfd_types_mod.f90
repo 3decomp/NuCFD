@@ -7,7 +7,7 @@ module nucfd_types
 
   type nucfd_stencil
      !! Type representing a stencil.
-     real, dimension(:), allocatable :: stencil !! Stencil data
+     class(*), dimension(:), allocatable :: stencil !! Stencil data
    contains
      final :: free_stencil
   end type nucfd_stencil
@@ -20,6 +20,10 @@ module nucfd_types
      !! Type representing the grid spacings of a stencil. Following Gamet et al. (1999) these are
      !! defined as h_i = x_i - x_{i-1}.
   end type nucfd_stencil_deltas
+
+  type, extends(nucfd_stencil) :: nucfd_index_stencil
+     !! Type representing a stencil's indices.
+  end type nucfd_index_stencil
 
 contains
 
@@ -36,7 +40,17 @@ contains
 
     lb = 1 - centre
     ub = (1 - centre) + (width - 1)
-    allocate(stencil%stencil(lb:ub))
+    select type(stencil)
+    type is(nucfd_stencil_points)
+       allocate(real::stencil%stencil(lb:ub))
+    type is(nucfd_stencil_deltas)
+       allocate(real::stencil%stencil(lb:ub))
+    type is(nucfd_index_stencil)
+       allocate(integer::stencil%stencil(lb:ub))
+    class default
+       print *, "Error: trying to create unknown stencil type"
+       error stop
+    end select
     
   end subroutine create_stencil
   
@@ -56,13 +70,27 @@ contains
     width = (ub - lb) + 1
     centre = 1 - lb
     call create_stencil(width, centre, h)
-    
-    do i = lbound(h%stencil, 1) + 1, ubound(h%stencil, 1)
-       xm1 = x%stencil(i - 1)
-       x0 = x%stencil(i)
 
-       h%stencil(i) = x0 - xm1
-    end do
+    associate(points => x%stencil, &
+         deltas => h%stencil)
+      select type(points)
+      type is(real)
+         select type(deltas)
+         type is(real)
+            do i = lbound(h%stencil, 1) + 1, ubound(h%stencil, 1)
+               xm1 = points(i - 1)
+               x0 = points(i)
+
+               deltas(i) = x0 - xm1
+            end do
+         class default
+            print *, "Error: Difference stencil is misallocated!"
+         end select
+      class default
+         print *, "Error: Coordinate stencil is misallocated!"
+         error stop
+      end select
+    end associate
     
    end function points_to_deltas
 

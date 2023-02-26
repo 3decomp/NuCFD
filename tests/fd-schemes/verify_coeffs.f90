@@ -1,9 +1,11 @@
+! tests/fd-schemes/verify_coeffs.f90
+!
+!! Part of the fd-schemes test suite.
+!
+! SPDX-License-Identifier: BSD-3-Clause
+
 program verify_coeffs
   !! Tests the computation of finite difference coefficients for non-uniform grids.
-  !!
-  !! Part of the fd-schemes test suite.
-  !!
-  !! SPDX-License-Identifier: BSD-3-Clause
 
   use nucfd_types
   use nucfd_coeffs
@@ -11,12 +13,12 @@ program verify_coeffs
   use nucfd_tests
   
   implicit none
-
-  type(nucfd_stencil_points) :: stencil ! Stencil of grid points.
   
   real :: n ! Mesh size
   real :: L ! Domain size
   real :: h ! Average grid spacing.
+
+  type(nucfd_stencil_points) :: stencil ! Stencil of grid points.
   
   real :: a, b, c, d, e
   real, parameter :: aref = 14.0 / 9.0
@@ -32,14 +34,18 @@ program verify_coeffs
   h = L / real(n - 1)
 
   call create_stencil(6, 4, stencil)
-  
-  stencil%stencil(:) = 0.0
-  stencil%stencil(-3) = -3.0 * h
-  stencil%stencil(-2) = -2.0 * h
-  stencil%stencil(-1) = -1.0 * h
-  stencil%stencil(0) = 0.0
-  stencil%stencil(1) = +1.0 * h
-  stencil%stencil(2) = +2.0 * h
+  select type(points => stencil%stencil)
+  type is(real)
+     points(:) = 0.0
+     points(-3) = -3.0 * h
+     points(-2) = -2.0 * h
+     points(-1) = -1.0 * h
+     points(0) = 0.0
+     points(1) = +1.0 * h
+     points(2) = +2.0 * h
+  class default
+     print *, "Error: Coordinate stencil is misallocated!"
+  end select
   
   a = coeff_a(stencil)
   call test_report("Coefficient A", check_scalar(a, aref / (2.0 * h)))
@@ -52,8 +58,14 @@ program verify_coeffs
   e = coeff_e(stencil)
   call test_report("Coefficient E", check_scalar(e, eref))
   
-  stencil%stencil(-3) = -5.0 * h
-  stencil%stencil(2)  = +3.0 * h
+  select type(points => stencil%stencil)
+  type is(real)
+     points(-3) = -5.0 * h
+     points(2)  = +3.0 * h
+  class default
+     print *, "Error: Coordinate stencil is misallocated!"
+  end select
+  
   a = coeff_a(stencil)
   b = coeff_b(stencil)
   call test_report("Coefficient A /= B", .not. check_scalar(a, b))
