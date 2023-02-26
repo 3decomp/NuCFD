@@ -12,12 +12,15 @@
 
 program verify_coeffs
 
+  use nucfd_types
   use nucfd_coeffs
 
   use nucfd_tests
   
   implicit none
 
+  type(nucfd_stencil_points(6, 4)) :: stencil ! Stencil of grid points.
+  
   real :: n ! Mesh size
   real :: L ! Domain size
   real :: h ! Average grid spacing.
@@ -31,7 +34,7 @@ program verify_coeffs
   L = 1.0
   h = L / real(n - 1)
   
-  a = coeff_a()
+  a = coeff_a(stencil)
   call test_report("Coefficient A", check_scalar(a, aref / (2.0 * h)))
   
   call finalise_suite()

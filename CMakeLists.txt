@@ -27,6 +27,7 @@ target_compile_options(nucfd_strict_flags INTERFACE
 ## Build nucfd library
 add_library(nucfd
   src/nucfd_trid_solver_mod.f90
+  src/nucfd_types_mod.f90
   src/nucfd_coeffs_mod.f90)
 target_link_libraries(nucfd nucfd_compiler_flags)
 
