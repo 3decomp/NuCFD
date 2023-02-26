@@ -1,17 +1,8 @@
-!!!! tests/tridsolver/system_11_symm.f90
-!!!
-!!!! Description
-!!!
-!!! Part of the tridsolver test suite.
-!!! Tests the solution of tridiagonal systems arising from compact finite differences of symmetric
-!!! functions.
-!!!
-!!!! LICENSE
-!!!
-!!! SPDX-License-Identifier: BSD-3-Clause
-!!!
-
 module nucfd_tests
+  !! NuCFD test module, enables defining test suites, reporting results of tests and overall status
+  !! of the suite, and provides utilities for checking floating-point numbers.
+  !!
+  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 
@@ -27,7 +18,8 @@ module nucfd_tests
 contains
 
   subroutine initialise_suite(test_suite_name)
-
+    !! Initialises the test suite, assigning a name and setting the initial status to PASS.
+    
     character(len=*), intent(in) :: test_suite_name
 
     suite_name = test_suite_name
@@ -41,7 +33,8 @@ contains
   end subroutine initialise_suite
 
   subroutine finalise_suite()
-  
+    !! Finalises a test suite, reporting on the overall status of the suite.
+    
     print *, "------------------------------------------------------------------------"
     call test_report(suite_name)
     print *, "************************************************************************"
@@ -53,7 +46,8 @@ contains
   end subroutine finalise_suite
   
   subroutine test_report(test_name, test_status)
-
+    !! Given a test name and status, reports as PASS/FAIL.
+    
     character(len=*), intent(in) :: test_name
     logical, intent(in), optional :: test_status
 
@@ -75,10 +69,10 @@ contains
   end subroutine test_report
 
   logical function check_scalar(test, ref)
-    ! Compute error and report errors.
+    !! Compute error and report for scalar values.
 
-    real, intent(in) :: test ! The test data
-    real, intent(in) :: ref  ! The reference data
+    real, intent(in) :: test !! The test data
+    real, intent(in) :: ref  !! The reference data
 
     real :: err
     logical :: test_passing
@@ -97,10 +91,10 @@ contains
   end function check_scalar
   
   logical function check_rms(test, ref)
-    ! Compute RMS of error and report errors.
+    !! Compute RMS of error and report errors.
 
-    real, dimension(:), intent(in) :: test ! The test data
-    real, dimension(:), intent(in) :: ref  ! The reference data
+    real, dimension(:), intent(in) :: test !! The test data
+    real, dimension(:), intent(in) :: ref  !! The reference data
 
     integer :: n
     integer :: i
