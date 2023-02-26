@@ -68,3 +68,8 @@ add_test_libs(tridsolver system_00_anti-symm trid_test_utils)
 
 # Finite difference test suite
 define_test(fd-schemes verify_coeffs)
+
+## Documentation
+add_custom_target(doc ford
+  ${CMAKE_SOURCE_DIR}/NuCFD.md
+  -d ${CMAKE_SOURCE_DIR}/src)
