@@ -36,3 +36,6 @@ build/
 
 # Ford generated documentation
 doc/
+
+# Emacs configuration
+.dir-locals.el
