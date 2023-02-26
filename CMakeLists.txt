@@ -12,6 +12,11 @@ cmake_minimum_required(VERSION 3.16)
 project(NuCFD)
 enable_language(Fortran)
 
+include(GNUInstallDirs)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+set(CMAKE_Fortran_MODULE_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
+
 ## Set compiler flags using interface libraries
 set(gcc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,GNU>")
 add_library(nucfd_compiler_flags INTERFACE)
