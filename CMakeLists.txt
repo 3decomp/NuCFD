@@ -30,13 +30,14 @@ target_compile_options(nucfd_debug_flags INTERFACE
   "$<${icc_like_fc}:-g;-O0;-check;all;-fpe0;-traceback;-init:snan,arrays>")
 add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
-  "$<${gcc_like_fc}:-Werror>")
+  "$<${gcc_like_fc}:-Werror;-Wno-error=integer-division>")
 
 ## Build nucfd library
 add_library(nucfd
   src/nucfd_trid_solver_mod.f90
   src/nucfd_types_mod.f90
-  src/nucfd_coeffs_mod.f90)
+  src/nucfd_coeffs_mod.f90
+  src/nucfd_deriv_mod.f90)
 target_link_libraries(nucfd nucfd_compiler_flags)
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
   target_link_libraries(nucfd nucfd_debug_flags)
@@ -80,6 +81,7 @@ add_test_libs(tridsolver system_00_anti-symm trid_test_utils)
 
 # Finite difference test suite
 define_test(fd-schemes verify_coeffs)
+define_test(fd-schemes differentiation_rules)
 
 ## Documentation
 add_custom_target(doc ford
