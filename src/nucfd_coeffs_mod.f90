@@ -127,8 +127,10 @@ contains
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
       coeff_a_deltas_alt = h0 * ((hm1 + h0) * (hp1 + hp2) + 2.0 * hp1 * hp2 * beta) & ! = (14/3) h^3
-           + hm1 * h0 * hp2 * (beta - alpha) & ! Should cancel for case alpha = beta
-           + (h0**2) * (hp2 - hp1) * beta      ! Should cancel for constant h
+           + hm1 * h0 * hp2 * (beta - alpha) & ! (G) Should cancel for case alpha = beta
+           + (h0**2) * (hp2 - hp1) * beta    & ! (R) Should cancel for constant h
+           + hm1 * hp1 * (2.0 * hp2 - h0 - hp1) * beta ! (Y) Should cancel for constant h
+           
       print *, "+++", coeff_a_deltas_alt / (h0**3), 14.0 / 3.0, "+++"
       coeff_a_deltas_alt = coeff_a_deltas_alt &
            / (3.0 * hp1 * ((h0 + hp1) / 2.0) * hp2) ! => 14.0 / 9.0 when h = const
