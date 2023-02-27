@@ -8,7 +8,7 @@ module nucfd_coeffs
   implicit none
 
   private
-  public :: coeff_a
+  public :: coeff_a, coeff_a_alt
   public :: coeff_b
   public :: coeff_c
   public :: coeff_d
@@ -19,6 +19,12 @@ module nucfd_coeffs
      module procedure coeff_a_points
      module procedure coeff_a_deltas
   end interface coeff_a
+
+  interface coeff_a_alt
+     !! Compute the coefficient acting on f_{i+1} of the finite diference stencil.
+     module procedure coeff_a_points_alt
+     module procedure coeff_a_deltas_alt
+  end interface coeff_a_alt
 
   interface coeff_b
      !! Compute the coefficient acting on f_{i-1} of the finite diference stencil.
@@ -86,6 +92,49 @@ contains
            / (hp1 * (h0 + hp1) * (hm1 + h0 + hp1) * hp2)
     end associate
   end function coeff_a_deltas
+
+  real function coeff_a_points_alt(x)
+    !! Compute the coefficient acting on f_{i+1} of the finite diference given a stencil of points.
+
+    type(nucfd_stencil_points), intent(in) :: x !! Stencil of points for the finite
+                                                !! difference.
+
+    type(nucfd_stencil_deltas) :: h  ! Stencil of grid spacings for the finite difference.
+    
+    h = points_to_deltas(x)
+    coeff_a_points_alt = coeff_a_alt(h)
+    
+  end function coeff_a_points_alt
+
+  real function coeff_a_deltas_alt(h)
+    !! Compute the coefficient acting on f_{i+1} of the finite diference given a stencil of grid
+    !! spacings.
+
+    type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
+
+    real :: hm2, hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
+
+    select type(deltas => h%stencil)
+    type is(real)
+       hm2 = deltas(-2)
+       hm1 = deltas(-1)
+       h0 = deltas(0)
+       hp1 = deltas(1)
+       hp2 = deltas(2)
+    class default
+       error stop
+    end select
+
+    associate(beta => alpha) ! To match Gamet et al. (1999)
+      coeff_a_deltas_alt = h0 * ((hm1 + h0) * (hp1 + hp2) + 2.0 * hp1 * hp2 * beta) ! = (14/3) h^3
+      print *, "+++", coeff_a_deltas_alt / (h0**3), 14.0 / 3.0, "+++"
+      coeff_a_deltas_alt = coeff_a_deltas_alt &
+           / (3.0 * hp1 * ((h0 + hp1) / 2.0) * hp2) ! => 14.0 / 9.0 when h = const
+      print *, "+++", coeff_a_deltas_alt, 14.0 / 9.0, "+++"
+      coeff_a_deltas_alt = coeff_a_deltas_alt &
+              / (2.0 * ((hm1 + h0 + hp1) / 3.0)) ! => (14.0 / 9.0) / (2h) when h = const
+    end associate
+  end function coeff_a_deltas_alt
 
   real function coeff_b_points(x)
     !! Compute the coefficient acting on f_{i-1} of the finite diference given a stencil of points.
