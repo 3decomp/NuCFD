@@ -51,7 +51,7 @@ module nucfd_coeffs
        type(nucfd_stencil_points), intent(in) :: x !! Stencil of points for the finite
                                                    !! difference.
      end function
-     module pure real function coeff_b_deltas(h)
+     module real function coeff_b_deltas(h)
        type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite
                                                    !! difference.
      end function
