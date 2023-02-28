@@ -82,6 +82,7 @@ contains
        test_passing = .false.
 
        print *, "Delta = ", err, " exceeds tolerance: ", 2 * epsilon(ref)
+       print *, "Value = ", test, " expected: ", ref
     else
        test_passing = .true.
     end if

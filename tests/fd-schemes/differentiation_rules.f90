@@ -37,6 +37,9 @@ program differentiation_rules
 
   allocate(x(n))
   allocate(f(n))
+  do i = 1, n
+    x(i) = real(i - 1) * h
+  end do
 
   print *, "+++ Initialising stencil +++"
   call create_stencil(width, centre, stencil)
