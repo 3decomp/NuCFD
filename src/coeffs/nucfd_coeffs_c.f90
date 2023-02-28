@@ -15,6 +15,20 @@ contains
                                                 !! difference.
 
     type(nucfd_stencil_deltas) :: h  ! Stencil of grid spacings for the finite difference.
+
+#ifndef NDEBUG
+    if (size(x%stencil) /= 5) then
+       print *, "Error@coeff_c_points: expecting width 5 stencil, received width = ", &
+            size(x%stencil)
+       error stop
+    end if
+    if (1 - lbound(x%stencil, 1) /= 3) then
+       print *, "Error@coeff_c_points: expecting centre 3 stencil, received centre = ", &
+            1 - lbound(h%stencil, 1)
+       print *, size(h%stencil), lbound(h%stencil), ubound(h%stencil)
+       error stop
+    end if
+#endif
     
     h = points_to_deltas(x)
     coeff_c_points = coeff_c_deltas(h)
@@ -28,6 +42,20 @@ contains
     type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
 
     real :: numerator, denominator, divisor
+
+#ifndef NDEBUG
+    if (size(h%stencil) /= 4) then
+       print *, "Error@coeff_c_deltas: expecting width 4 stencil, received width = ", &
+            size(h%stencil)
+       error stop
+    end if
+    if (1 - lbound(h%stencil, 1) /= 2) then
+       print *, "Error@coeff_c_deltas: expecting centre 2 stencil, received centre = ", &
+            1 - lbound(h%stencil, 1)
+       print *, size(h%stencil), lbound(h%stencil), ubound(h%stencil)
+       error stop
+    end if
+#endif
     
     call coeff_c_components(h, numerator, denominator, divisor)
     coeff_c_deltas = (numerator / denominator) / divisor
@@ -47,6 +75,20 @@ contains
     real, intent(out) :: divisor     !! The finite-difference divisor of the coefficient
     
     real :: hm1, h0, hp1, hp2 ! Grid deltas at i -1, 0, +1, +2
+
+#ifndef NDEBUG
+    if (size(h%stencil) /= 4) then
+       print *, "Error@coeff_c_components: expecting width 4 stencil, received width = ", &
+            size(h%stencil)
+       error stop
+    end if
+    if (1 - lbound(h%stencil, 1) /= 2) then
+       print *, "Error@coeff_c_components: expecting centre 2 stencil, received centre = ", &
+            1 - lbound(h%stencil, 1)
+       print *, size(h%stencil), lbound(h%stencil), ubound(h%stencil)
+       error stop
+    end if
+#endif
 
     select type(deltas => h%stencil)
     type is(real)

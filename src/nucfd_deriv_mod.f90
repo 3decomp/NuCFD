@@ -28,14 +28,13 @@ contains
 
     real :: a, b, c, d, e
     
-    call create_stencil(6, 4, stencil_coordinates)
+    call create_stencil(5, 3, stencil_coordinates)
 
     print *, "*** Creating coordinate stencil ***"
     select type(indices => stencil%stencil)
     type is(integer)
        select type(points => stencil_coordinates%stencil)
        type is(real)
-          points(-3) = x(indices(-2) - 1)
           points(-2) = x(indices(-2))
           points(-1) = x(indices(-1))
           points(+0) = x(indices(+0))

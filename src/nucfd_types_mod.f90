@@ -77,7 +77,7 @@ contains
       type is(real)
          select type(deltas)
          type is(real)
-            do i = lbound(h%stencil, 1) + 1, ubound(h%stencil, 1)
+            do i = lb, ub
                xm1 = points(i - 1)
                x0 = points(i)
 

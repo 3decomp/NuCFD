@@ -15,6 +15,20 @@ contains
                                                 !! difference.
 
     type(nucfd_stencil_deltas) :: h  ! Stencil of grid spacings for the finite difference.
+
+#ifndef NDEBUG
+    if (size(x%stencil) /= 5) then
+       print *, "Error@coeff_a_points: expecting width 5 stencil, received width = ", &
+            size(x%stencil)
+       error stop
+    end if
+    if (1 - lbound(x%stencil, 1) /= 3) then
+       print *, "Error@coeff_a_points: expecting centre 3 stencil, received centre = ", &
+            1 - lbound(h%stencil, 1)
+       print *, size(h%stencil), lbound(h%stencil), ubound(h%stencil)
+       error stop
+    end if
+#endif
     
     h = points_to_deltas(x)
     coeff_a_points = coeff_a(h)
@@ -28,6 +42,20 @@ contains
     type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
 
     real :: numerator, numerator_corr, denominator, divisor
+
+#ifndef NDEBUG
+    if (size(h%stencil) /= 4) then
+       print *, "Error@coeff_a_deltas: expecting width 4 stencil, received width = ", &
+            size(h%stencil)
+       error stop
+    end if
+    if (1 - lbound(h%stencil, 1) /= 2) then
+       print *, "Error@coeff_a_deltas: expecting centre 2 stencil, received centre = ", &
+            1 - lbound(h%stencil, 1)
+       print *, size(h%stencil), lbound(h%stencil), ubound(h%stencil)
+       error stop
+    end if
+#endif
 
     call coeff_a_components(h, numerator, numerator_corr, denominator, divisor)
     coeff_a_deltas = ((numerator + numerator_corr) / denominator) / divisor
@@ -43,11 +71,24 @@ contains
     real, intent(out) :: denominator
     real, intent(out) :: divisor
     
-    real :: hm2, hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
+    real :: hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
+
+#ifndef NDEBUG
+    if (size(h%stencil) /= 4) then
+       print *, "Error@coeff_a_components: expecting width 4 stencil, received width = ", &
+            size(h%stencil)
+       error stop
+    end if
+    if (1 - lbound(h%stencil, 1) /= 2) then
+       print *, "Error@coeff_a_components: expecting centre 2 stencil, received centre = ", &
+            1 - lbound(h%stencil, 1)
+       print *, size(h%stencil), lbound(h%stencil), ubound(h%stencil)
+       error stop
+    end if
+#endif
 
     select type(deltas => h%stencil)
     type is(real)
-       hm2 = deltas(-2)
        hm1 = deltas(-1)
        h0 = deltas(0)
        hp1 = deltas(1)

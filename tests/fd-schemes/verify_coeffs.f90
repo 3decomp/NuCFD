@@ -42,11 +42,10 @@ program verify_coeffs
   L = 1.0
   h = L / real(n - 1)
 
-  call create_stencil(6, 4, stencil)
+  call create_stencil(5, 3, stencil)
   select type(points => stencil%stencil)
   type is(real)
      points(:) = 0.0
-     points(-3) = -3.0 * h
      points(-2) = -2.0 * h
      points(-1) = -1.0 * h
      points(0) = 0.0
@@ -91,7 +90,7 @@ program verify_coeffs
 
   select type(points => stencil%stencil)
   type is(real)
-     points(-3) = -5.0 * h
+     points(-2) = -4.0 * h
      points(2)  = +3.0 * h
   class default
      print *, "Error: Coordinate stencil is misallocated!"
