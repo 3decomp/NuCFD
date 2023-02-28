@@ -176,7 +176,8 @@ contains
       coeff_b_alt_deltas = -hp1 * ((hm1 + h0) * (hp1 + hp2) + 2.0 * hm1 * h0 * alpha) & ! = -(14/3) h^3
            - hm1 * hp1 * hp2 * (alpha - beta) & ! (G) Should cancel for case alpha = beta
            - (hp1**2) * (hm1 - h0) * alpha &    ! (R) Should cancel for case h = const
-           - h0 * hp2 * (2.0 * hm1 - h0 - hp1) * alpha !(Y) Should cancel for case h = const
+           - h0 * hp2 * (2.0 * hm1 - h0 - hp1) * alpha & !(Y) Should cancel for case h = const
+           - (h0**2) * (3.0 * hm1 - h0 - 2.0 * hp1) * alpha
       print *, "+++", coeff_b_alt_deltas, -(14.0 / 3.0) * (h0**3), "+++"
 
       coeff_b_alt_deltas = coeff_b_alt_deltas &
