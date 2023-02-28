@@ -37,11 +37,8 @@ program differentiation_rules
 
   allocate(x(n))
   allocate(f(n))
-  do i = 1, n
-     x(i) = real(i - 1) * h
-     f(i) = sin(x(i))
-  end do
-  
+
+  print *, "+++ Initialising stencil +++"
   call create_stencil(width, centre, stencil)
   i = 33 / 2
   select type(indices => stencil%stencil)
@@ -55,11 +52,52 @@ program differentiation_rules
      print *, "Error: Index stencil is misallocated!"
      error stop
   end select
-  
+
+  print *, "+++ Testing derivative of constant function +++"
+  f(:) = 1.0
   call deriv_rhs(f, stencil, x, dfdx)
   call deriv_rhs(f + 1.0, stencil, x, dgdx)
+  call test_report("Shifted derivative +, const f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(f - 1.0, stencil, x, dgdx)
+  call test_report("Shifted derivative -, const f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(f, stencil, x, dgdx)
+  call test_report("Shifted derivative 0, const f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(2.0 * f, stencil, x, dgdx)
+  call test_report("Scaled derivative 2x, const f", check_scalar(dgdx, 2.0 * dfdx))
+  call deriv_rhs(-f, stencil, x, dgdx)
+  call test_report("Scaled derivative -1, const f", check_scalar(dgdx, -dfdx))
 
-  call test_report("Shifted derivative", check_scalar(dgdx, dfdx))
+  print *, "+++ Testing derivative of linearly increasing function +++"
+  f(1) = 0.0
+  dfdx = 1.0
+  do i = 2, n
+     f(i) = f(i - 1) + h * dfdx
+  end do
+  call deriv_rhs(f, stencil, x, dfdx)
+  call deriv_rhs(f + 1.0, stencil, x, dgdx)
+  call test_report("Shifted derivative +, linear+ f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(f - 1.0, stencil, x, dgdx)
+  call test_report("Shifted derivative -, linear+ f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(f, stencil, x, dgdx)
+  call test_report("Shifted derivative 0, linear+ f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(2.0 * f, stencil, x, dgdx)
+  call test_report("Scaled derivative 2x, linear+ f", check_scalar(dgdx, 2.0 * dfdx))
+  call deriv_rhs(-f, stencil, x, dgdx)
+  call test_report("Scaled derivative -1, linear+ f", check_scalar(dgdx, -dfdx))
+
+  print *, "+++ Testing derivative of linearly decreasing function +++"
+  f(:) = -f(:)
+  call deriv_rhs(f, stencil, x, dfdx)
+  call deriv_rhs(f + 1.0, stencil, x, dgdx)
+  call test_report("Shifted derivative +, linear- f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(f - 1.0, stencil, x, dgdx)
+  call test_report("Shifted derivative -, linear- f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(f, stencil, x, dgdx)
+  call test_report("Shifted derivative 0, linear- f", check_scalar(dgdx, dfdx))
+  call deriv_rhs(2.0 * f, stencil, x, dgdx)
+  call test_report("Scaled derivative 2x, linear- f", check_scalar(dgdx, 2.0 * dfdx))
+  call deriv_rhs(-f, stencil, x, dgdx)
+  call test_report("Scaled derivative -1, linear- f", check_scalar(dgdx, -dfdx))
   
   deallocate(x)
   deallocate(f)
