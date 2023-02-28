@@ -8,7 +8,7 @@ module nucfd_coeffs
   implicit none
 
   private
-  public :: coeff_a
+  public :: coeff_a, coeff_a_components
   public :: coeff_b
   public :: coeff_c, coeff_c_components
   public :: coeff_d, coeff_d_components
@@ -47,6 +47,14 @@ module nucfd_coeffs
        type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite
                                                    !! difference.
      end function
+     module subroutine coeff_a_components(h, numerator, numerator_corr, denominator, divisor)
+       type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
+       real, intent(out) :: numerator
+       real, intent(out) :: numerator_corr
+       real, intent(out) :: denominator
+       real, intent(out) :: divisor
+     end subroutine coeff_a_components
+
      module real function coeff_b_points(x)
        type(nucfd_stencil_points), intent(in) :: x !! Stencil of points for the finite
                                                    !! difference.
