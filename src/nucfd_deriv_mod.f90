@@ -50,8 +50,8 @@ contains
        d = coeff_d(stencil_coordinates)
        e = coeff_e(stencil_coordinates)
 
-       dfdx = (a * f(indices(+1)) + b * f(indices(-1))) &
-            + (c * f(indices(+2)) + d * f(indices(-2))) &
+       dfdx = a * (f(indices(+1)) + (b / a) * f(indices(-1))) &
+            + c * (f(indices(+2)) + (d / c) * f(indices(-2))) &
             + e * f(indices(0))
     class default
        print *, "Error: Index stencil is misallocated!"
