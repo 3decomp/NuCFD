@@ -42,39 +42,36 @@ contains
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
 
-      coeff_a_deltas = coeff_numerator(hm2, hm1, h0, hp1, hp2, alpha, beta) ! => (14/3) h^3,
-                                                                            ! h=const, alpha=beta
-      coeff_a_deltas = coeff_a_deltas &                                ! => Zero correction,
-           + coeff_numerator_corr(hm2, hm1, h0, hp1, hp2, alpha, beta) ! h=const, alpha=beta
+      coeff_a_deltas = coeff_numerator(hm1, h0, hp1, hp2, beta)   ! => (14/3) h^3,
+                                                                  ! h=const, beta=1/3
+      coeff_a_deltas = coeff_a_deltas &                           ! => Zero correction,
+           + coeff_numerator_corr(hm1, h0, hp1, hp2, alpha, beta) ! h=const, alpha=beta
       coeff_a_deltas = coeff_a_deltas &
-           / coeff_denominator(h0, hp1, hp2)                           ! => 14/9, h=const
+           / coeff_denominator(h0, hp1, hp2)                      ! => 14/9, h=const
       coeff_a_deltas = coeff_a_deltas &
-           / coeff_denominator_2h(hm1, h0, hp1)                        ! => (14/9)/(2h), h=const
+           / coeff_denominator_2h(hm1, h0, hp1)                   ! => (14/9)/(2h), h=const
     end associate
   end function coeff_a_deltas
 
-  pure real function coeff_numerator(hm2, hm1, h0, hp1, hp2, alpha, beta)
+  pure real function coeff_numerator(hm1, h0, hp1, hp2, beta)
     !! Computes the numerator of the coefficient acting on f_{i+1}.
     !!
-    !! Reduces to (14/3) h^3 when h=const and alpha=beta.
+    !! Reduces to (14/3) h^3 when h=const and beta=1/3.
     
-    real, intent(in) :: hm2 
     real, intent(in) :: hm1 
     real, intent(in) :: h0 
     real, intent(in) :: hp1 
     real, intent(in) :: hp2
-    real, intent(in) :: alpha
     real, intent(in) :: beta
     
     coeff_numerator = h0 * ((hm1 + h0) * (hp1 + hp2) + 2.0 * hp1 * hp2 * beta) ! = (14/3) h^3
   end function coeff_numerator
 
-  pure real function coeff_numerator_corr(hm2, hm1, h0, hp1, hp2, alpha, beta)
+  pure real function coeff_numerator_corr(hm1, h0, hp1, hp2, alpha, beta)
     !! Computes the non-uniform correction to the numerator acting on f_{i+1}.
     !!
     !! Reduces to zero when h=const and alpha=beta.
     
-    real, intent(in) :: hm2 
     real, intent(in) :: hm1 
     real, intent(in) :: h0 
     real, intent(in) :: hp1 
@@ -94,7 +91,7 @@ contains
     !! Computes the denominator of the coefficient acting on f_{i+1}.
     !!
     !! Reduces to 3 h^3 when h=const. Dividing the numerator by this term yields the coefficient
-    !! 14/9 when h=const.
+    !! 14/9 when h=const, alpha=beta=1/3.
 
     real, intent(in) :: h0 
     real, intent(in) :: hp1 
@@ -106,7 +103,8 @@ contains
   pure real function coeff_denominator_2h(hm1, h0, hp1)
     !! Computes the non-uniform equivalent to 2h divisor of the coefficient acting on f_{i+1}.
     !!
-    !! Dividing the coefficient by this term should reduce to (14/9)/(2h) when h=const.
+    !! Dividing the coefficient by this term should reduce to (14/9)/(2h) when h=const,
+    !! alpha=beta=1/3.
     
     real, intent(in) :: hm1 
     real, intent(in) :: h0 
