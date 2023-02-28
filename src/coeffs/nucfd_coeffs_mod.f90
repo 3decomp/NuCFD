@@ -10,7 +10,7 @@ module nucfd_coeffs
   private
   public :: coeff_a
   public :: coeff_b
-  public :: coeff_c
+  public :: coeff_c, coeff_c_components
   public :: coeff_d
   public :: coeff_e
 
@@ -55,14 +55,27 @@ module nucfd_coeffs
        type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite
                                                    !! difference.
      end function
+
      module real function coeff_c_points(x)
        type(nucfd_stencil_points), intent(in) :: x !! Stencil of points for the finite
                                                    !! difference.
      end function
-     module pure real function coeff_c_deltas(h)
+     module real function coeff_c_deltas(h)
        type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite
                                                    !! difference.
      end function
+     module subroutine coeff_c_components(h, numerator, denominator, divisor)
+       !! Compute the components of the coefficient acting on f_{i+2} of the finite diference given a
+       !! stencil of grid spacings.
+       !!
+       !! For uniform grids the numerator should reduce to (2/3) h^3, the denominator to 6h^3 (for a
+       !! coefficient value of (1/9) h^3) and the finite difference divisor to 4h.
+       type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
+       real, intent(out) :: numerator   !! The numerator of the coefficient
+       real, intent(out) :: denominator !! The denominator of the coefficient
+       real, intent(out) :: divisor     !! The finite-difference divisor of the coefficient
+     end subroutine coeff_c_components
+     
      module real function coeff_d_points(x)
        type(nucfd_stencil_points), intent(in) :: x !! Stencil of points for the finite
                                                    !! difference.

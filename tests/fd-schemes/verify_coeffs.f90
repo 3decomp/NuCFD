@@ -26,6 +26,11 @@ program verify_coeffs
   real, parameter :: cref = 1.0 / 9.0
   real, parameter :: dref = -cref
   real, parameter :: eref = 0.0
+
+  real :: numerator, denominator, divisor
+  real, parameter :: numerator_f2ref = 2.0 / 3.0
+  real, parameter :: denominator_f2ref = 6.0
+  real, parameter :: divisor_f2ref = 4.0
   
   call initialise_suite("Verify coefficients")
 
@@ -51,8 +56,14 @@ program verify_coeffs
   call test_report("Coefficient A", check_scalar(a, aref / (2.0 * h)))
   b = coeff_b(stencil)
   call test_report("Coefficient B", check_scalar(b, bref / (2.0 * h)))
+
+  call coeff_c_components(points_to_deltas(stencil), numerator, denominator, divisor)
+  call test_report("Coefficient C numerator", check_scalar(numerator, numerator_f2ref * (h**3)))
+  call test_report("Coefficient C denominator", check_scalar(denominator, denominator_f2ref * (h**3)))
+  call test_report("Coefficient C divisor", check_scalar(divisor, divisor_f2ref * h))
   c = coeff_c(stencil)
   call test_report("Coefficient C", check_scalar(c, cref / (4.0 * h)))
+
   d = coeff_d(stencil)
   call test_report("Coefficient D", check_scalar(d, dref / (4.0 * h)))
   e = coeff_e(stencil)
