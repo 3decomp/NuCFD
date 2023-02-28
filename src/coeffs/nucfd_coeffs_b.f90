@@ -27,6 +27,22 @@ contains
 
     type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
 
+    real :: numerator, numerator_corr, denominator, divisor
+
+    call coeff_b_components(h, numerator, numerator_corr, denominator, divisor)
+
+    coeff_b_deltas = ((numerator + numerator_corr) / denominator) / divisor
+    
+  end function coeff_b_deltas
+
+  module subroutine coeff_b_components(h, numerator, numerator_corr, denominator, divisor)
+
+    type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
+    real, intent(out) :: numerator
+    real, intent(out) :: numerator_corr
+    real, intent(out) :: denominator
+    real, intent(out) :: divisor
+
     real :: hm2, hm1, h0, hp1, hp2 ! Grid deltas at i -2, -1, 0, +1, +2
 
     select type(deltas => h%stencil)
@@ -41,16 +57,13 @@ contains
     end select
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
-      coeff_b_deltas = coeff_numerator(hm1, h0, hp1, hp2, alpha)  ! => (14/3) h^3, h=const,
-                                                                  ! alpha=1/3
-      coeff_b_deltas = coeff_b_deltas &                           ! => Zero correction,
-           + coeff_numerator_corr(hm1, h0, hp1, hp2, alpha, beta) ! h=const, alpha=beta
-      coeff_b_deltas = coeff_b_deltas &
-           /  coeff_denominator(hm1, h0, hp1)                     ! => -14/9, h=const
-      coeff_b_deltas = coeff_b_deltas &
-           / coeff_denominator_2h(h0, hp1, hp2)                   ! => -(14/9)/(2h), h = const
+      numerator = coeff_numerator(hm1, h0, hp1, hp2, alpha)
+      numerator_corr = coeff_numerator_corr(hm1, h0, hp1, hp2, alpha, beta)
+      denominator = coeff_denominator(hm1, h0, hp1)
+      divisor = coeff_divisor(h0, hp1, hp2)
     end associate
-  end function coeff_b_deltas
+
+  end subroutine coeff_b_components
 
   pure real function coeff_numerator(hm1, h0, hp1, hp2, alpha)
     !! Computes the numerator of the coefficient acting on f_{i-1}.
@@ -99,7 +112,7 @@ contains
     coeff_denominator = 3.0 * hm1 * h0 * ((h0 + hp1) / 2.0)
   end function coeff_denominator
 
-  pure real function coeff_denominator_2h(h0, hp1, hp2)
+  pure real function coeff_divisor(h0, hp1, hp2)
     !! Computes the non-uniform equivalent to 2h divisor of the coefficient acting on f_{i-1}.
     !!
     !! Dividing the coefficient by this term should reduce to (14/9)/(2h) when h=const,
@@ -109,7 +122,7 @@ contains
     real, intent(in) :: hp1
     real, intent(in) :: hp2
 
-    coeff_denominator_2h = 2.0 * (h0 + hp1 + hp2) / 3.0
-  end function coeff_denominator_2h
+    coeff_divisor = 2.0 * (h0 + hp1 + hp2) / 3.0
+  end function coeff_divisor
   
 end submodule nucfd_coeffs_b

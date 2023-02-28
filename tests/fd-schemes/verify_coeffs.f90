@@ -64,6 +64,11 @@ program verify_coeffs
   a = coeff_a(stencil)
   call test_report("Coefficient A", check_scalar(a, aref / (2.0 * h)))
 
+  call coeff_b_components(points_to_deltas(stencil), numerator, numerator_corr, denominator, divisor)
+  call test_report("Coefficient B numerator", check_scalar(numerator, -numerator_f1ref * (h**3)))
+  call test_report("Coefficient B numerator correction", check_scalar(numerator_corr, -numerator_corr_f1ref * (h**3)))
+  call test_report("Coefficient B denominator", check_scalar(denominator, denominator_f1ref * (h**3)))
+  call test_report("Coefficient B divisor", check_scalar(divisor, divisor_f1ref * h))
   b = coeff_b(stencil)
   call test_report("Coefficient B", check_scalar(b, bref / (2.0 * h)))
 
