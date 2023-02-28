@@ -85,7 +85,7 @@ contains
            + hm1 * h0 * hp2 * (beta - alpha) & ! Should cancel for case alpha = beta
            + (h0**2) * (hp2 - hp1) * beta    & ! Should cancel for constant h
            + hm1 * hp1 * (2.0 * hp2 - h0 - hp1) * beta &      ! Should cancel for constant h
-           + (hp1**3) * (3.0 * hp2 - 2.0 * h0 - hp1) * beta & ! Should cancel for constant h
+           + (hp1**2) * (3.0 * hp2 - 2.0 * h0 - hp1) * beta & ! Should cancel for constant h
            + h0 * (2.0 * hp1 * hp2 * beta - hm1 * (h0 + hp1) * alpha) ! Should cancel for constant h
            
       coeff_a_deltas = coeff_a_deltas &
@@ -177,7 +177,7 @@ contains
            - hm1 * hp1 * hp2 * (alpha - beta) & ! (G) Should cancel for case alpha = beta
            - (hp1**2) * (hm1 - h0) * alpha &    ! (R) Should cancel for case h = const
            - h0 * hp2 * (2.0 * hm1 - h0 - hp1) * alpha & !(Y) Should cancel for case h = const
-           - (h0**2) * (3.0 * hm1 - h0 - 2.0 * hp1) * alpha
+           - (h0**2) * (3.0 * hm1 - h0 - 2.0 * hp1) * alpha ! (B) Should cancel for case h = const
       print *, "+++", coeff_b_alt_deltas, -(14.0 / 3.0) * (h0**3), "+++"
 
       coeff_b_alt_deltas = coeff_b_alt_deltas &
