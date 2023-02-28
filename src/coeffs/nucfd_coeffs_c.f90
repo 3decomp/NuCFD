@@ -39,7 +39,7 @@ contains
     !! stencil of grid spacings.
     !!
     !! For uniform grids the numerator should reduce to (2/3) h^3, the denominator to 6h^3 (for a
-    !! coefficient value of (1/9) h^3) and the finite difference divisor to 4h.
+    !! coefficient value of 1/9) and the finite difference divisor to 4h.
 
     type(nucfd_stencil_deltas), intent(in) :: h !! Stencil of grid spacings for the finite difference.
     real, intent(out) :: numerator   !! The numerator of the coefficient
