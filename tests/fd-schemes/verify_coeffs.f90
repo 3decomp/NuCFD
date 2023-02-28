@@ -57,6 +57,9 @@ program verify_coeffs
   call test_report("Coefficient D", check_scalar(d, dref / (4.0 * h)))
   e = coeff_e(stencil)
   call test_report("Coefficient E", check_scalar(e, eref))
+  
+  b = coeff_b_alt(stencil)
+  call test_report("Coefficient B (ALT)", check_scalar(b, bref / (2.0 * h)))
 
   select type(points => stencil%stencil)
   type is(real)
