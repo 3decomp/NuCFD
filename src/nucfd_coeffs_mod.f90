@@ -173,7 +173,8 @@ contains
     end select
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
-      coeff_b_alt_deltas = -hp1 * ((hm1 + h0) * (hp1 + hp2) + 2.0 * hm1 * h0 * alpha) ! = -(14/3) h^3
+      coeff_b_alt_deltas = -hp1 * ((hm1 + h0) * (hp1 + hp2) + 2.0 * hm1 * h0 * alpha) & ! = -(14/3) h^3
+           - hm1 * hp1 * hp2 * (alpha - beta) ! Should cancel for case alpha = beta
       print *, "+++", coeff_b_alt_deltas, -(14.0 / 3.0) * (h0**3), "+++"
 
       coeff_b_alt_deltas = coeff_b_alt_deltas &
