@@ -24,8 +24,8 @@ contains
     end if
     if (1 - lbound(x%stencil, 1) /= 3) then
        print *, "Error@coeff_d_points: expecting centre 3 stencil, received centre = ", &
-            1 - lbound(h%stencil, 1)
-       print *, size(h%stencil), lbound(h%stencil), ubound(h%stencil)
+            1 - lbound(x%stencil, 1)
+       print *, size(x%stencil), lbound(x%stencil), ubound(x%stencil)
        error stop
     end if
 #endif
