@@ -8,7 +8,7 @@
 #
 
 ## Basic configuration
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.25.2)
 project(NuCFD)
 enable_language(Fortran)
 
@@ -20,23 +20,28 @@ set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_SOURCE_DIR}/${CMAKE_INSTALL_INCLUDEDI
 ## Set compiler flags using interface libraries
 set(gcc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,GNU>")
 set(icc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,Intel>")
+set(cray_like_fc "$<COMPILE_LANG_AND_ID:Fortran,Cray>")
 add_library(nucfd_compiler_flags INTERFACE)
 target_compile_options(nucfd_compiler_flags INTERFACE
-  "$<${gcc_like_fc}:-std=f2008;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
-  "$<${icc_like_fc}:-std08;-warn;all>")
+  "$<${gcc_like_fc}:-cpp;-std=f2018;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
+  "$<${icc_like_fc}:-fpp;-std18;-warn;all>"
+  "$<${cray_like_fc}:-cpp;-hfp0;-en;-emf;-eI>") # Anything greater than fp0 fails tests!
 add_library(nucfd_debug_flags INTERFACE)
 target_compile_options(nucfd_debug_flags INTERFACE
   "$<${gcc_like_fc}:-g;-Og;-ffpe-trap=invalid,zero;-fcheck=bounds;-fbacktrace>"
-  "$<${icc_like_fc}:-g;-O0;-check;all;-fpe0;-traceback;-init:snan,arrays>")
+  "$<${icc_like_fc}:-g;-O0;-check;all;-fpe0;-traceback;-init:snan,arrays>"
+  "$<${cray_like_fc}:-G2;-O0;-R;bc;-ei>")
 add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
-  "$<${gcc_like_fc}:-Werror>")
+  "$<${gcc_like_fc}:-Werror;-Wno-error=integer-division>"
+  "$<${cray_like_fc}:-eN>")
 
 ## Build nucfd library
 add_library(nucfd
   src/nucfd_trid_solver_mod.f90
   src/nucfd_types_mod.f90
-  src/nucfd_coeffs_mod.f90)
+  src/coeffs/nucfd_coeffs_mod.f90 src/coeffs/nucfd_coeffs_a.f90 src/coeffs/nucfd_coeffs_b.f90 src/coeffs/nucfd_coeffs_c.f90 src/coeffs/nucfd_coeffs_d.f90 src/coeffs/nucfd_coeffs_e.f90
+  src/nucfd_deriv_mod.f90)
 target_link_libraries(nucfd nucfd_compiler_flags)
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
   target_link_libraries(nucfd nucfd_debug_flags)
@@ -80,6 +85,7 @@ add_test_libs(tridsolver system_00_anti-symm trid_test_utils)
 
 # Finite difference test suite
 define_test(fd-schemes verify_coeffs)
+define_test(fd-schemes differentiation_rules)
 
 ## Examples
 add_executable(compute_derivatives examples/compute-derivatives.f90)
