@@ -49,8 +49,7 @@ enable_testing()
 add_subdirectory(tests)
 
 ## Examples
-add_executable(compute_derivatives examples/compute-derivatives.f90)
-target_link_libraries(compute_derivatives nucfd)
+add_subdirectory(examples)
 
 ## Documentation
 add_custom_target(doc ford
