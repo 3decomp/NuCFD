@@ -18,6 +18,7 @@ module nucfd_deriv
 contains
   
   subroutine deriv_rhs(f, stencil, x, dfdx)
+    !! Compute the RHS of the derivative of a function f based on a stencil of indices.
 
     real, dimension(:), intent(in) :: f
     type(nucfd_index_stencil), intent(in) :: stencil
