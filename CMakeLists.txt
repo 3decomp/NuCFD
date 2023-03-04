@@ -2,6 +2,8 @@
 #
 ## Description
 #
+# Main CMakeLists file for the NuCFD project.
+#
 ## LICENSE
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -35,57 +37,16 @@ add_library(nucfd_strict_flags INTERFACE)
 target_compile_options(nucfd_strict_flags INTERFACE
   "$<${gcc_like_fc}:-Werror;-Wno-error=integer-division>"
   "$<${cray_like_fc}:-eN>")
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+  target_link_libraries(nucfd_compiler_flags nucfd_debug_flags)
+endif()
 
 ## Build nucfd library
-add_library(nucfd
-  src/nucfd_trid_solver_mod.f90
-  src/nucfd_types_mod.f90
-  src/coeffs/nucfd_coeffs_mod.f90 src/coeffs/nucfd_coeffs_a.f90 src/coeffs/nucfd_coeffs_b.f90 src/coeffs/nucfd_coeffs_c.f90 src/coeffs/nucfd_coeffs_d.f90 src/coeffs/nucfd_coeffs_e.f90
-  src/nucfd_deriv_mod.f90)
-target_link_libraries(nucfd nucfd_compiler_flags)
-if (CMAKE_BUILD_TYPE MATCHES "Debug")
-  target_link_libraries(nucfd nucfd_debug_flags)
-endif()
+add_subdirectory(src)
 
 ## Testing
 enable_testing()
-
-add_library(nucfd_test_flags INTERFACE)
-target_link_libraries(nucfd_test_flags INTERFACE
-  nucfd_compiler_flags
-  nucfd_debug_flags
-  nucfd_strict_flags)
-
-add_library(nucfd_test_framework tests/nucfd_tests_mod.f90)
-target_link_libraries(nucfd_test_framework nucfd_test_flags)
-
-function(define_test suite test_name)
-  add_executable(${test_name} tests/${suite}/${test_name}.f90)
-  target_link_libraries(${test_name} nucfd)
-  target_link_libraries(${test_name} nucfd_test_framework)
-  target_link_libraries(${test_name} nucfd_test_flags)
-  add_test(NAME ${suite}:${test_name} COMMAND ${test_name})
-endfunction()
-
-function(add_test_libs suite test_name lib)
-  target_link_libraries(${test_name} ${lib})
-endfunction()
-
-# Tidiagonal solver test suite
-add_library(trid_test_utils tests/tridsolver/tridsol_test_utils_mod.f90)
-target_link_libraries(trid_test_utils nucfd_test_flags)
-define_test(tridsolver system_11_symm nucfd_test_framework)
-define_test(tridsolver system_11_anti-symm)
-add_test_libs(tridsolver system_11_symm trid_test_utils)
-add_test_libs(tridsolver system_11_anti-symm trid_test_utils)
-define_test(tridsolver system_00_symm nucfd_test_framework)
-define_test(tridsolver system_00_anti-symm)
-add_test_libs(tridsolver system_00_symm trid_test_utils)
-add_test_libs(tridsolver system_00_anti-symm trid_test_utils)
-
-# Finite difference test suite
-define_test(fd-schemes verify_coeffs)
-define_test(fd-schemes differentiation_rules)
+add_subdirectory(tests)
 
 ## Documentation
 add_custom_target(doc ford
