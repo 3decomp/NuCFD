@@ -1,7 +1,11 @@
+! src/nucfd_types_mod.f90
+!
+!! Defines the nucfd_types module.
+!
+! SPDX-License-Identifier: BSD-3-Clause
+
 module nucfd_types
   !! Module defining the custom types used by NuCFD.
-  !!
-  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 
@@ -77,7 +81,7 @@ contains
       type is(real)
          select type(deltas)
          type is(real)
-            do i = lbound(h%stencil, 1) + 1, ubound(h%stencil, 1)
+            do i = lb, ub
                xm1 = points(i - 1)
                x0 = points(i)
 

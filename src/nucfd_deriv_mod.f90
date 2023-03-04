@@ -18,6 +18,7 @@ module nucfd_deriv
 contains
   
   subroutine deriv_rhs(f, stencil, x, dfdx)
+    !! Compute the RHS of the derivative of a function f based on a stencil of indices.
 
     real, dimension(:), intent(in) :: f
     type(nucfd_index_stencil), intent(in) :: stencil
@@ -28,13 +29,12 @@ contains
 
     real :: a, b, c, d, e
     
-    call create_stencil(6, 4, stencil_coordinates)
+    call create_stencil(5, 3, stencil_coordinates)
 
     select type(indices => stencil%stencil)
     type is(integer)
        select type(points => stencil_coordinates%stencil)
        type is(real)
-          points(-3) = x(indices(-2) - 1)
           points(-2) = x(indices(-2))
           points(-1) = x(indices(-1))
           points(+0) = x(indices(+0))
@@ -44,14 +44,15 @@ contains
           print *, "Error: Coordinate stencil is misallocated!"
           error stop
        end select
-       
+
        a = coeff_a(stencil_coordinates)
        b = coeff_b(stencil_coordinates)
        c = coeff_c(stencil_coordinates)
        d = coeff_d(stencil_coordinates)
        e = coeff_e(stencil_coordinates)
-       dfdx = (a * f(indices(+1)) + b * f(indices(-1))) &
-            + (c * f(indices(+2)) + d * f(indices(-2))) &
+
+       dfdx = a * (f(indices(+1)) + (b / a) * f(indices(-1))) &
+            + c * (f(indices(+2)) + (d / c) * f(indices(-2))) &
             + e * f(indices(0))
     class default
        print *, "Error: Index stencil is misallocated!"

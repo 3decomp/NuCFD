@@ -8,7 +8,7 @@
 #
 
 ## Basic configuration
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.25.2)
 project(NuCFD)
 enable_language(Fortran)
 
@@ -23,9 +23,9 @@ set(icc_like_fc "$<COMPILE_LANG_AND_ID:Fortran,Intel>")
 set(cray_like_fc "$<COMPILE_LANG_AND_ID:Fortran,Cray>")
 add_library(nucfd_compiler_flags INTERFACE)
 target_compile_options(nucfd_compiler_flags INTERFACE
-  "$<${gcc_like_fc}:-std=f2018;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
-  "$<${icc_like_fc}:-std18;-warn;all>"
-  "$<${cray_like_fc}:-hfp0;-en;-emf;-eI>") # Anything greater than fp0 fails tests!
+  "$<${gcc_like_fc}:-cpp;-std=f2018;-Wall;-Wextra;-Wpedantic;-Warray-bounds;-Wimplicit-interface;-Wimplicit-procedure;-fimplicit-none>"
+  "$<${icc_like_fc}:-fpp;-std18;-warn;all>"
+  "$<${cray_like_fc}:-cpp;-hfp0;-en;-emf;-eI>") # Anything greater than fp0 fails tests!
 add_library(nucfd_debug_flags INTERFACE)
 target_compile_options(nucfd_debug_flags INTERFACE
   "$<${gcc_like_fc}:-g;-Og;-ffpe-trap=invalid,zero;-fcheck=bounds;-fbacktrace>"
@@ -40,7 +40,7 @@ target_compile_options(nucfd_strict_flags INTERFACE
 add_library(nucfd
   src/nucfd_trid_solver_mod.f90
   src/nucfd_types_mod.f90
-  src/nucfd_coeffs_mod.f90
+  src/coeffs/nucfd_coeffs_mod.f90 src/coeffs/nucfd_coeffs_a.f90 src/coeffs/nucfd_coeffs_b.f90 src/coeffs/nucfd_coeffs_c.f90 src/coeffs/nucfd_coeffs_d.f90 src/coeffs/nucfd_coeffs_e.f90
   src/nucfd_deriv_mod.f90)
 target_link_libraries(nucfd nucfd_compiler_flags)
 if (CMAKE_BUILD_TYPE MATCHES "Debug")

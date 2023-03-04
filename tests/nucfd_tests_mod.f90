@@ -1,8 +1,12 @@
+! tests/nucfd_tests_mod.f90
+!
+!! Defines the nucfd_tests module.
+!
+! SPDX-License-Identifier: BSD-3-Clause
+
 module nucfd_tests
   !! NuCFD test module, enables defining test suites, reporting results of tests and overall status
   !! of the suite, and provides utilities for checking floating-point numbers.
-  !!
-  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 
@@ -82,6 +86,7 @@ contains
        test_passing = .false.
 
        print *, "Delta = ", err, " exceeds tolerance: ", 2 * epsilon(ref)
+       print *, "Value = ", test, " expected: ", ref
     else
        test_passing = .true.
     end if
