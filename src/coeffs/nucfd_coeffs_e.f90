@@ -1,4 +1,12 @@
+! src/coeffs/nucfd_coeff_e.f90
+!
+!! Implements coefficient E of the nucfd_coeffs module.
+!
+! SPDX-License-Identifier: BSD-3-Clause
+
 submodule (nucfd_coeffs) nucfd_coeffs_e
+  !! Submodule defining the coefficient acting on f_i for compact finite difference schemes on
+  !! non-uniform grids.
 
   implicit none
 

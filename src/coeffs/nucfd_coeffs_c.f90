@@ -1,8 +1,12 @@
+! src/coeffs/nucfd_coeff_c.f90
+!
+!! Implements coefficient C of the nucfd_coeffs module.
+!
+! SPDX-License-Identifier: BSD-3-Clause
+
 submodule (nucfd_coeffs) nucfd_coeffs_c
   !! Submodule defining the coefficient acting on f_{i+2} for compact finite difference schemes on
   !! non-uniform grids.
-  !!
-  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 
