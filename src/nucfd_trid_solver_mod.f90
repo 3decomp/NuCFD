@@ -1,9 +1,13 @@
+! src/nucfd_trid_solver_mod.f90
+!
+!! Defines the nucfd_trid_solver module.
+!
+! SPDX-License-Identifier: BSD-3-Clause
+
 module nucfd_trid_solver
   !! Module implementing a simple tridiagonal solver based on the algorithm given at
   !! https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm including support for cyclic
   !! systems.
-  !!
-  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 

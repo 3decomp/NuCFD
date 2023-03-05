@@ -1,9 +1,13 @@
+! tests/tridsolver/tridsol_test_utils_mod.f90
+!
+!! Defines the tridsol_test_utils module.
+!!
+!! Part of the tridsolver test suite.
+!
+! SPDX-License-Identifier: BSD-3-Clause
+
 module tridsol_test_utils
   !! Module defining utility functions for the tridiagonal solver test suite.
-  !!
-  !! Part of the tridsolver test suite.
-  !!
-  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 
