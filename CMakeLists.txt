@@ -48,8 +48,8 @@ add_subdirectory(src)
 enable_testing()
 add_subdirectory(tests)
 
-## Examples
-add_subdirectory(examples)
+## Examples (optional)
+add_subdirectory(examples EXCLUDE_FROM_ALL)
 
 ## Documentation
 add_custom_target(doc ford
