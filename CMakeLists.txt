@@ -14,6 +14,11 @@ cmake_minimum_required(VERSION 3.25.2)
 project(NuCFD)
 enable_language(Fortran)
 
+option(BUILD_SHARED_LIBS "Enable building as a shared library" OFF)
+if(BUILD_SHARED_LIBS)
+  set(CMAKE_POSITION_INDEPENDENT_CODE true)
+endif()
+
 include(GNUInstallDirs)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
