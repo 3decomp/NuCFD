@@ -10,4 +10,5 @@
 #
 
 define_test(fd-schemes verify_coeffs)
-define_test(fd-schemes differentiation_rules)
+
+add_subdirectory(differentiation_rules)
