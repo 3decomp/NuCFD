@@ -9,6 +9,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-define_test(fd-schemes verify_coeffs)
-
+add_subdirectory(verify_coeffs)
 add_subdirectory(differentiation_rules)
