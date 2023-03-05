@@ -43,7 +43,7 @@ target_compile_options(nucfd_strict_flags INTERFACE
   "$<${gcc_like_fc}:-Werror;-Wno-error=integer-division>"
   "$<${cray_like_fc}:-eN>")
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
-  target_link_libraries(nucfd_compiler_flags nucfd_debug_flags)
+  target_link_libraries(nucfd_compiler_flags INTERFACE nucfd_debug_flags)
 endif()
 
 ## Build nucfd library
