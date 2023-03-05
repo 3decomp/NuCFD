@@ -1,11 +1,11 @@
-! tests/fd-schemes/differentiation_rules.f90
+! tests/fd-schemes/differentiation_rules/linear_rising_function.f90
 !
 !! Part of the fd-schemes test suite.
 !
 ! SPDX-License-Identifier: BSD-3-Clause
 
-program differentiation_rules
-  !! Tests that rules of differentiation are respected.
+program linear_rising_function
+  !! Tests that rules of differentiation are respected for linearly increasing functions.
 
   use nucfd_types
   use nucfd_deriv
@@ -29,7 +29,7 @@ program differentiation_rules
   integer, parameter :: width = 5
   integer, parameter :: centre = 3
   
-  call initialise_suite("Differentiation rules")
+  call initialise_suite("Linearly increasing function differentiation rules")
 
   n = 33
   L = 1.0
@@ -56,21 +56,6 @@ program differentiation_rules
      error stop
   end select
 
-  print *, "+++ Testing derivative of constant function +++"
-  f(:) = 1.0
-  call deriv_rhs(f, stencil, x, dfdx)
-  call deriv_rhs(f + 1.0, stencil, x, dgdx)
-  call test_report("Shifted derivative +, const f", check_scalar(dgdx, dfdx))
-  call deriv_rhs(f - 1.0, stencil, x, dgdx)
-  call test_report("Shifted derivative -, const f", check_scalar(dgdx, dfdx))
-  call deriv_rhs(f, stencil, x, dgdx)
-  call test_report("Shifted derivative 0, const f", check_scalar(dgdx, dfdx))
-  call deriv_rhs(2.0 * f, stencil, x, dgdx)
-  call test_report("Scaled derivative 2x, const f", check_scalar(dgdx, 2.0 * dfdx))
-  call deriv_rhs(-f, stencil, x, dgdx)
-  call test_report("Scaled derivative -1, const f", check_scalar(dgdx, -dfdx))
-
-  print *, "+++ Testing derivative of linearly increasing function +++"
   f(1) = 0.0
   dfdx = 1.0
   do i = 2, n
@@ -87,24 +72,10 @@ program differentiation_rules
   call test_report("Scaled derivative 2x, linear+ f", check_scalar(dgdx, 2.0 * dfdx))
   call deriv_rhs(-f, stencil, x, dgdx)
   call test_report("Scaled derivative -1, linear+ f", check_scalar(dgdx, -dfdx))
-
-  print *, "+++ Testing derivative of linearly decreasing function +++"
-  f(:) = -f(:)
-  call deriv_rhs(f, stencil, x, dfdx)
-  call deriv_rhs(f + 1.0, stencil, x, dgdx)
-  call test_report("Shifted derivative +, linear- f", check_scalar(dgdx, dfdx))
-  call deriv_rhs(f - 1.0, stencil, x, dgdx)
-  call test_report("Shifted derivative -, linear- f", check_scalar(dgdx, dfdx))
-  call deriv_rhs(f, stencil, x, dgdx)
-  call test_report("Shifted derivative 0, linear- f", check_scalar(dgdx, dfdx))
-  call deriv_rhs(2.0 * f, stencil, x, dgdx)
-  call test_report("Scaled derivative 2x, linear- f", check_scalar(dgdx, 2.0 * dfdx))
-  call deriv_rhs(-f, stencil, x, dgdx)
-  call test_report("Scaled derivative -1, linear- f", check_scalar(dgdx, -dfdx))
   
   deallocate(x)
   deallocate(f)
   
   call finalise_suite()
   
-end program differentiation_rules
+end program linear_rising_function
