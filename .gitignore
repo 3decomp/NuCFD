@@ -39,3 +39,7 @@ doc/
 
 # Emacs configuration
 .dir-locals.el
+
+# Output
+*.dat
+*.png
