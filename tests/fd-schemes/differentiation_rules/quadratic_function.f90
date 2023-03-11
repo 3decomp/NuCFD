@@ -1,11 +1,11 @@
-! tests/fd-schemes/differentiation_rules/linear_rising_function.f90
+! tests/fd-schemes/differentiation_rules/quadratic_function.f90
 !
 !! Part of the fd-schemes test suite.
 !
 ! SPDX-License-Identifier: BSD-3-Clause
 
-program linear_rising_function
-  !! Tests that rules of differentiation are respected for linearly increasing functions.
+program quadratic_function
+  !! Tests that rules of differentiation are respected for quadratic functions.
 
   use nucfd_types
   use nucfd_deriv
@@ -28,7 +28,7 @@ program linear_rising_function
 
   integer :: i
   
-  call initialise_suite("Linearly increasing function differentiation rules")
+  call initialise_suite("Quadratic function differentiation rules")
 
   n = 33
   L = 1.0
@@ -38,10 +38,8 @@ program linear_rising_function
   x = create_mesh_array(ts)
   stencil = build_stencil(ts)
 
-  f(1) = 0.0
-  dfdx = 1.0
-  do i = 2, n
-     f(i) = f(i - 1) + ts%h * dfdx
+  do i = 1, n
+     f(i) = x(i)**2
   end do
   call deriv_rhs(f, stencil, x, dfdx)
   call deriv_rhs(f + 1.0, stencil, x, dgdx)
@@ -60,4 +58,4 @@ program linear_rising_function
   
   call finalise_suite()
   
-end program linear_rising_function
+end program quadratic_function

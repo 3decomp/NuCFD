@@ -4,7 +4,7 @@
 !
 ! SPDX-License-Identifier: BSD-3-Clause
 
-program verify_coeff_b
+program verify_coeff_a
   !! Tests the computation of finite difference coefficient for non-uniform grids acting on f_{i+1}.
 
   use nucfd_types
@@ -58,4 +58,4 @@ program verify_coeff_b
 
   call finalise_suite()
 
-end program verify_coeff_b
+end program verify_coeff_a

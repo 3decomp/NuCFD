@@ -50,8 +50,14 @@ endif()
 add_subdirectory(src)
 
 ## Testing
-enable_testing()
-add_subdirectory(tests)
+# option(BUILD_TESTING "Build the testing tree" OFF) # Disables testing by default
+include(CTest)
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
+
+## Examples (optional)
+add_subdirectory(examples EXCLUDE_FROM_ALL)
 
 ## Documentation
 add_custom_target(doc ford

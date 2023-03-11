@@ -28,6 +28,10 @@ contains
     type(nucfd_stencil_points) :: stencil_coordinates
 
     real :: a, b, c, d, e
+
+    integer :: offset
+
+    offset = lbound(x, 1) - (-1)
     
     call create_stencil(5, 3, stencil_coordinates)
 
@@ -35,11 +39,7 @@ contains
     type is(integer)
        select type(points => stencil_coordinates%stencil)
        type is(real)
-          points(-2) = x(indices(-2))
-          points(-1) = x(indices(-1))
-          points(+0) = x(indices(+0))
-          points(+1) = x(indices(+1))
-          points(+2) = x(indices(+2))
+          points(:) = x(indices(:) + offset)
        class default
           print *, "Error: Coordinate stencil is misallocated!"
           error stop
@@ -51,9 +51,9 @@ contains
        d = coeff_d(stencil_coordinates)
        e = coeff_e(stencil_coordinates)
 
-       dfdx = a * (f(indices(+1)) + (b / a) * f(indices(-1))) &
-            + c * (f(indices(+2)) + (d / c) * f(indices(-2))) &
-            + e * f(indices(0))
+       dfdx = a * (f(indices(+1) + offset) + (b / a) * f(indices(-1) + offset)) &
+            + c * (f(indices(+2) + offset) + (d / c) * f(indices(-2) + offset)) &
+            + e * f(indices(0) + offset)
     class default
        print *, "Error: Index stencil is misallocated!"
        error stop
