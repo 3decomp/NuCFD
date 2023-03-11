@@ -27,11 +27,11 @@ program linear_rising_function
   type(nucfd_index_stencil) :: stencil
   type(test_setup) :: ts
 
-  integer :: i
+  integer :: i, idx
 
   logical :: passing
   
-  call initialise_suite("Linearly increasing function differentiation rules")
+  call initialise_suite("Constant gradient on locally refined mesh")
 
   n = 33
   L = 1.0
@@ -47,18 +47,19 @@ program linear_rising_function
      f(i) = f(i - 1) + (x(i) - x(i - 1)) * dfdx
   end do
 
-  i = 3
+  i = 1
   call centre_stencil(i, stencil)
   call deriv_rhs(f, stencil, x, dfdx)
 
   passing = .true.
-  do i = 4, n - 2
-     print *, i, x(i - 1) - x(i - 2), x(i) - x(i - 1), x(i + 1) - x(i), x(i + 2) - x(i + 1)
+  do i = 2, n - 4
+     idx = i + 2
+     print *, idx, x(idx - 1) - x(idx - 2), x(idx) - x(idx - 1), x(idx + 1) - x(idx), x(idx + 2) - x(idx + 1)
      call centre_stencil(i, stencil)
      call deriv_rhs(f, stencil, x, dgdx)
      passing = passing .and. check_scalar(dgdx, dfdx)
   end do
-  call test_report("Variable mesh, constant gradient", passing)
+  call test_report("Gradient remains constant", passing)
   
   deallocate(x)
   deallocate(f)
