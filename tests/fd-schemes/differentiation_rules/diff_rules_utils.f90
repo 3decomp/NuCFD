@@ -61,7 +61,11 @@ contains
 
     associate(n => ts%n, h => ts%h)
       do i = 1, n
-         x(i) = real(i - 1) * h
+         if (i < n / 2) then
+            x(i) = real(i - 1) * h
+         else
+            x(i) = x(i - 1) + h / 2.0
+         end if
       end do
     end associate
 
