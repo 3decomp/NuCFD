@@ -11,7 +11,7 @@ module tridsol_test_utils
 
   public :: compute_rhs
   public :: allocate_system
-  
+
 contains
 
   subroutine compute_rhs(a, b, c, x, rhs)
@@ -26,7 +26,7 @@ contains
     n = size(x)
 
     allocate(rhs(n))
-    
+
     rhs(1) = b(1) * x(1) + c(1) * x(2)
     do i = 2, n - 1
        rhs(i) = a(i) * x(i - 1) + b(i) * x(i) + c(i) * x(i + 1)
@@ -34,15 +34,15 @@ contains
     rhs(n) = a(1) * x(n - 1) + b(n) * x(n)
 
   end subroutine compute_rhs
-  
+
   subroutine allocate_system(n, a, b, c, x, xref)
     !! Allocates a tridiagonal system.
-    
+
     integer, intent(in) :: n
     real, dimension(:), allocatable, intent(out) :: a, b, c, x, xref
 
     allocate(a(n), b(n), c(n), x(n), xref(n))
-    
+
   end subroutine allocate_system
-  
+
 end module tridsol_test_utils
