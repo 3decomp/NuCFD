@@ -30,10 +30,10 @@ regexp-rules:
     case-sensitive: true
     active: true
 
-  real-avbp-working-precision:
-    message: Use AVBP working precision
-    regexp: (?<=real)(?!\(\s*pr\s*\))\([^\(]*\)
-    replacement: (pr)
+  # real-avbp-working-precision:
+  #   message: Use AVBP working precision
+  #   regexp: (?<=real)(?!\(\s*pr\s*\))\([^\(]*\)
+  #   replacement: (pr)
 
   character-string-length:
     message: Use strl or shortstrl
