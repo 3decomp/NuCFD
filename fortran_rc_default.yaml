@@ -39,20 +39,20 @@ regexp-rules:
     message: Use strl or shortstrl
     regexp: (?<=character)(\s*\(\s*len\s*=\s*)(?!\s*strl\b|\s*shortstrl\b)[^\(]*?(\s*\))
 
-  missing-space-before-call-parameters:
-    message: Missing space between subroutine name and parenthesis
-    regexp: (?<=call\s)(\s*\w+)\(
-    replacement: \1 (
+  # missing-space-before-call-parameters:
+  #   message: Missing space between subroutine name and parenthesis
+  #   regexp: (?<=call\s)(\s*\w+)\(
+  #   replacement: \1 (
 
-  missing-space-after-call-parenthesis:
-    message: Missing space after first parenthesis
-    regexp: (?<=call\s)(\s*\w+\s*)\((\S)
-    replacement: ( \2
+  # missing-space-after-call-parenthesis:
+  #   message: Missing space after first parenthesis
+  #   regexp: (?<=call\s)(\s*\w+\s*)\((\S)
+  #   replacement: ( \2
 
-  missing-space-before-call-parenthesis:
-    message: Missing space before last parenthesis
-    regexp: (?<=call\s)(\s*\w+\s*\([^)(]*(?:\([^)(]*(?:\([^)(]*\)[^)(]*)*\)[^)(]*)*(?<!\s))\)
-    replacement: \1 )
+  # missing-space-before-call-parenthesis:
+  #   message: Missing space before last parenthesis
+  #   regexp: (?<=call\s)(\s*\w+\s*\([^)(]*(?:\([^)(]*(?:\([^)(]*\)[^)(]*)*\)[^)(]*)*(?<!\s))\)
+  #   replacement: \1 )
 
   excessive-use-of-space:
     message: Except for indentation, single spaces are sufficient
