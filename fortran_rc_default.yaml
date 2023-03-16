@@ -18,35 +18,17 @@ regexp-rules:
     case-sensitive: true
     active: true
 
-  # intrinsics-should-be-uppercased:
-  #   message: Intrinsics keywords should be uppercased
-  #   regexp: \b({intrinsics_lower}|end(?:{blocks_lower}|{structs_lower}))\b
-  #   case-sensitive: true
-  #   active: true
-
   intrinsics-args-should-be-lowercased:
     message: Intrinsics named argument should be lowercased
     regexp: \b({named-args_upper})(?=\s*=)
     case-sensitive: true
     active: true
-  
-  # intrinsics-args-should-be-uppercased:
-  #   message: Intrinsics named argument should be uppercased
-  #   regexp: \b({named-args_lower})(?=\s*=)
-  #   case-sensitive: true
-  #   active: true
 
   types-should-be-lowercased:
     message: Types should be lowercased
     regexp: \b({types_upper})\b
     case-sensitive: true
     active: true
-
-  # types-should-be-uppercased:
-  #   message: Types should be uppercased
-  #   regexp: \b({types_lower})\b
-  #   case-sensitive: true
-  #   active: true
 
   real-avbp-working-precision:
     message: Use AVBP working precision
@@ -77,41 +59,41 @@ regexp-rules:
     regexp: '(?<=\S)  +(?=[^\s!])'
     replacement: ' '
 
-  # missing-space-around-operator:
-  #   message: Missing space around operator
-  #   regexp: ([^\s=])({operators})([^\s=])
-  #   replacement: \1 \2 \3
-  #   active: false
+  missing-space-around-operator:
+    message: Missing space around operator
+    regexp: ([^\s=])({operators})([^\s=])
+    replacement: \1 \2 \3
+    active: false
 
-  # missing-space-before-operator:
-  #   message: Missing space before operator
-  #   regexp: ([^\s=])({operators})(?=\s)
-  #   replacement: \1 \2
-  #   active: false
+  missing-space-before-operator:
+    message: Missing space before operator
+    regexp: ([^\s=])({operators})(?=\s)
+    replacement: \1 \2
+    active: false
 
-  # missing-space-after-operator:
-  #   message: Missing space after operator
-  #   regexp: (?<=\s)({operators})([^\s=])
-  #   replacement: \1 \2
-  #   active: false
+  missing-space-after-operator:
+    message: Missing space after operator
+    regexp: (?<=\s)({operators})([^\s=])
+    replacement: \1 \2
+    active: false
 
-  # missing-space-around-separator:
-  #   message: Missing space around separator
-  #   regexp: (\S)::(\S)
-  #   replacement: '\1 :: \2'
-  #   active: false
+  missing-space-around-separator:
+    message: Missing space around separator
+    regexp: (\S)::(\S)
+    replacement: '\1 :: \2'
+    active: false
 
-  # missing-space-before-separator:
-  #   message: Missing space before separator
-  #   regexp: (\S)::(?=\s)
-  #   replacement: '\1 ::'
-  #   active: false
+  missing-space-before-separator:
+    message: Missing space before separator
+    regexp: (\S)::(?=\s)
+    replacement: '\1 ::'
+    active: false
 
-  # missing-space-after-separator:
-  #   message: Missing space after separator
-  #   regexp: (?<=\s)::(\S)
-  #   replacement: ':: \1'
-  #   active: false
+  missing-space-after-separator:
+    message: Missing space after separator
+    regexp: (?<=\s)::(\S)
+    replacement: ':: \1'
+    active: false
 
   # missing-space-after-punctuation:
   #   message: Missing space after punctuation
@@ -172,19 +154,17 @@ regexp-rules:
     regexp: ([^\s=])(?<!kind|.len)=([^\s=])
     replacement: \1 = \2
 
-  # missing-space-after-=:
-  #   message: Missing space after "="
-  #   regexp: (?<!kind|.len|...\s)\s+=([^\s=])
-  #   replacement: = \1
-  #   active: false
+  missing-space-after-=:
+    message: Missing space after "="
+    regexp: (?<!kind|.len|...\s)\s+=([^\s=])
+    replacement: = \1
+    active: false
 
-
-  # missing-space-before-=:
-  #   message: Missing space before "="
-  #   regexp: ([^\s=])(?<!kind|.len)=(?=\s)
-  #   replacement: \1 =
-  #   active: false
-
+  missing-space-before-=:
+    message: Missing space before "="
+    regexp: ([^\s=])(?<!kind|.len)=(?=\s)
+    replacement: \1 =
+    active: false
 
   trailing-whitespaces:
     message: Trailing whitespaces
