@@ -30,7 +30,7 @@ function(add_test_libs suite test_name lib)
   target_link_libraries(${test_name} ${lib})
 endfunction()
 
-# Tidiagonal solver test suite
+# Tridiagonal solver test suite
 add_subdirectory(tridsolver)
 
 # Finite difference test suite
