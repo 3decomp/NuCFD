@@ -28,6 +28,9 @@ program verify_coeff_a
   real, parameter :: numerator_corr_f1ref = 0.0
   real, parameter :: denominator_f1ref = 3.0
   real, parameter :: divisor_f1ref = 2.0
+
+  real :: a_2h
+  real :: numerator_2h, numerator_corr_2h, denominator_2h, divisor_2h
   
   call initialise_suite("Verify coefficient A")
 
@@ -55,6 +58,31 @@ program verify_coeff_a
   call test_report("Coefficient A divisor", check_scalar(divisor, divisor_f1ref * h))
   a = coeff_a(stencil)
   call test_report("Coefficient A", check_scalar(a, aref / (2.0 * h)))
+
+  !! Check coefficient is independent of scale
+  select type(points => stencil%stencil)
+  type is(real)
+     points(:) = 0.0
+     points(-2) = -2.0 * (2 * h)
+     points(-1) = -1.0 * (2 * h)
+     points(0) = 0.0
+     points(1) = +1.0 * (2 * h)
+     points(2) = +2.0 * (2 * h)
+  class default
+     print *, "Shouldn't happen!"
+  end select
+  call coeff_a_components(points_to_deltas(stencil), numerator_2h, numerator_corr_2h, &
+       denominator_2h, divisor_2h)
+  call test_report("Coefficient A numerator (scale independence)", check_scalar(numerator / (h**3), &
+       numerator_2h / ((2 * h)**3)))
+  call test_report("Coefficient A numerator correction (scale independence)", check_scalar(numerator_corr / (h**3), &
+       numerator_corr_2h / ((2 * h)**3)))
+  call test_report("Coefficient A denominator (scale independence)", check_scalar(denominator / (h**3), &
+       denominator_2h / ((2 * h)**3)))
+  call test_report("Coefficient A divisor (scale independence)", check_scalar(divisor / h, &
+       divisor_2h / (2 * h)))
+  a_2h = coeff_a(stencil)
+  call test_report("Coefficient A (scale independence)", check_scalar(a * h, a_2h * (2 * h)))
 
   call finalise_suite()
 
