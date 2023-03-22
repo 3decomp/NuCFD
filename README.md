@@ -36,3 +36,4 @@ Documentation can be generated using the FORD tool by running
 ``
 make -C build/ doc
 ``
+the generated documentation can be viewed in a web browser by opening `./manual/index.html`.
