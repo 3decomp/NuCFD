@@ -35,7 +35,7 @@
 build/
 
 # Ford generated documentation
-doc/
+manual/
 
 # Emacs configuration
 .dir-locals.el
@@ -43,3 +43,6 @@ doc/
 # Output
 *.dat
 *.png
+
+# Stupid MacOS
+.DS_Store
