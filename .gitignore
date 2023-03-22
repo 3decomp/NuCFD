@@ -39,3 +39,6 @@ manual/
 
 # Emacs configuration
 .dir-locals.el
+
+# Stupid MacOS
+.DS_Store
