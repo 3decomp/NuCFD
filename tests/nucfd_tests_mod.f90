@@ -1,8 +1,12 @@
+! tests/nucfd_tests_mod.f90
+!
+!! Defines the nucfd_tests module.
+!
+! SPDX-License-Identifier: BSD-3-Clause
+
 module nucfd_tests
   !! NuCFD test module, enables defining test suites, reporting results of tests and overall status
   !! of the suite, and provides utilities for checking floating-point numbers.
-  !!
-  !! SPDX-License-Identifier: BSD-3-Clause
 
   implicit none
 
@@ -10,7 +14,8 @@ module nucfd_tests
   public :: initialise_suite, finalise_suite
   public :: test_report
   public :: check_rms
-
+  public :: check_scalar
+  
   character(len=:), allocatable :: suite_name
   logical, save :: passing
 
@@ -67,11 +72,34 @@ contains
 
   end subroutine test_report
 
+  logical function check_scalar(test, ref)
+    !! Compute error and report for scalar values.
+
+    real, intent(in) :: test !! The test data
+    real, intent(in) :: ref  !! The reference data
+
+    real :: err
+    logical :: test_passing
+    
+    err = abs(test - ref)
+    if (err > (2 * epsilon(ref))) then
+       test_passing = .false.
+
+       print *, "Delta = ", err, " exceeds tolerance: ", 2 * epsilon(ref)
+       print *, "Value = ", test, " expected: ", ref
+    else
+       test_passing = .true.
+    end if
+
+    check_scalar = test_passing
+
+  end function check_scalar
+  
   logical function check_rms(test, ref)
     !! Compute RMS of error and report errors.
 
-    real, dimension(:), intent(in) :: test ! The test data
-    real, dimension(:), intent(in) :: ref  ! The reference data
+    real, dimension(:), intent(in) :: test !! The test data
+    real, dimension(:), intent(in) :: ref  !! The reference data
 
     integer :: n
     integer :: i
