@@ -15,7 +15,7 @@ program test_system_00_symm
 
   use nucfd_tests
   use tridsol_test_utils
-  
+
   implicit none
 
   real, parameter :: pi = 4.0 * atan(1.0)
@@ -23,7 +23,7 @@ program test_system_00_symm
   call initialise_suite("System 00 symmetric")
 
   call solve_00_system(32)
-  
+
   call finalise_suite()
 
 contains
@@ -38,12 +38,12 @@ contains
     integer :: i
 
     logical :: passing
-    
+
     passing = .true.
 
     L = 1.0
     dx = L / real(n)
-    
+
     call allocate_system(n, a, b, c, sol, ref)
 
     ! Set bulk coefficients.
@@ -67,7 +67,7 @@ contains
     passing = check_rms(sol, ref)
 
     call test_report("Solve 00 system", passing)
-    
+
   end subroutine solve_00_system
-  
+
 end program test_system_00_symm
