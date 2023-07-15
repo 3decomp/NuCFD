@@ -102,7 +102,7 @@ contains
     end select
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
-      numerator = coeff_numerator(hm1, h0, hp2, hp2, beta)
+      numerator = coeff_numerator(hm1, h0, hp1, hp2, beta)
       numerator_corr = coeff_numerator_corr(hm1, h0, hp1, hp2, alpha, beta)
       denominator = coeff_denominator(h0, hp1, hp2)
       divisor = coeff_divisor(hm1, h0, hp1)
