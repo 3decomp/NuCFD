@@ -106,8 +106,8 @@ contains
 
     associate(beta => alpha) ! To match Gamet et al. (1999)
       numerator = coeff_numerator(h0, hp1, hp2, alpha, beta)
-      denominator = coeff_denominator(hm1, h0, hp1, hp2)
-      divisor = coeff_divisor(hm1, h0, hp1)
+      denominator = coeff_denominator(hm1, h0, hp1)
+      divisor = coeff_divisor(hm1, h0, hp1, hp2)
     end associate
     
   end subroutine coeff_d_components
@@ -129,7 +129,7 @@ contains
     
   end function coeff_numerator
   
-  pure real function coeff_denominator(hm1, h0, hp1, hp2)
+  pure real function coeff_denominator(hm1, h0, hp1)
     !! Computes the denominator of the coefficient acting on f_{f-2}.
     !!
     !! Reduces to 6 h^3 when h=const. Dividing the numerator by this term yields the coefficient
@@ -138,14 +138,13 @@ contains
     real, intent(in) :: hm1
     real, intent(in) :: h0
     real, intent(in) :: hp1
-    real, intent(in) :: hp2
 
-    coeff_denominator = 3.0 * hm1 * (hp1 + hp2) &
-         * ((hm1 + h0 + hp1 + hp2) / 4.0)
+    coeff_denominator = hm1 * (hm1 + h0) &
+         * (hm1 + h0 + hp1)
     
   end function coeff_denominator
 
-  pure real function coeff_divisor(hm1, h0, hp1)
+  pure real function coeff_divisor(hm1, h0, hp1, hp2)
     !! Computes the non-uniform equivalent to 4h divisor of the coefficient acting on f_{i-2}.
     !!
     !! Dividing the coefficient by this term should reduce to -(1/9)/(4h) when h=const,
@@ -154,8 +153,9 @@ contains
     real, intent(in) :: hm1
     real, intent(in) :: h0
     real, intent(in) :: hp1
+    real, intent(in) :: hp2
 
-    coeff_divisor = 4.0 * ((hm1 + h0 + hp1) / 3.0) 
+    coeff_divisor = (hm1 + h0 + hp1 + hp2)
   end function coeff_divisor
 
 end submodule nucfd_coeffs_d
