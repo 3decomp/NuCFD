@@ -6,6 +6,7 @@ This is the change log for `NuCFD`, it is based on the format suggested by [Keep
 
 ### Added
 
+- Added example code to compute derivative of a function [010989b].
 - Added `FORD` documentation system [c780fe1].
 - Added tridiagonal solver with support for periodic problems [f5d254f].
 - Added simple library to support writing tests [a5814c8].

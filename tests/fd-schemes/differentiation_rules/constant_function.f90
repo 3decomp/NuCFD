@@ -11,50 +11,30 @@ program constant_function
   use nucfd_deriv
   
   use nucfd_tests
+  use diff_rules_utils
   
   implicit none
 
   integer :: n ! Grid size
   real :: L    ! Domain size
-  real :: h    ! Grid spacing
 
   real, dimension(:), allocatable :: x ! Grid
   real, dimension(:), allocatable :: f ! Function
   real :: dfdx ! Derivative
   real :: dgdx ! Derivative
 
-  ! Stencil
   type(nucfd_index_stencil) :: stencil
-  integer :: i
-  integer, parameter :: width = 5
-  integer, parameter :: centre = 3
+  type(test_setup) :: ts
   
   call initialise_suite("Constant function differentiation rules")
 
   n = 33
   L = 1.0
-  h = L / real(n - 1)
 
-  allocate(x(n))
-  allocate(f(n))
-  do i = 1, n
-    x(i) = real(i - 1) * h
-  end do
-
-  print *, "+++ Initialising stencil +++"
-  call create_stencil(width, centre, stencil)
-  i = 33 / 2
-  select type(indices => stencil%stencil)
-  type is(integer)
-     indices(-2) = i - 2
-     indices(-1) = i - 1
-     indices(+0) = i + 0
-     indices(+1) = i + 1
-     indices(+2) = i + 2
-  class default
-     print *, "Error: Index stencil is misallocated!"
-     error stop
-  end select
+  ts = initialise_test(n, L)
+  f = allocate_test_array(ts)
+  x = create_mesh_array(ts)
+  stencil = build_stencil(ts)
 
   f(:) = 1.0
   call deriv_rhs(f, stencil, x, dfdx)

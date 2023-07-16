@@ -40,5 +40,9 @@ manual/
 # Emacs configuration
 .dir-locals.el
 
+# Output
+*.dat
+*.png
+
 # Stupid MacOS
 .DS_Store

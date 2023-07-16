@@ -15,13 +15,14 @@ target_link_libraries(nucfd_test_flags INTERFACE
   nucfd_debug_flags
   nucfd_strict_flags)
 
-add_library(nucfd_test_framework nucfd_tests_mod.f90)
+add_library(nucfd_test_framework OBJECT
+  nucfd_tests_mod.f90)
 target_link_libraries(nucfd_test_framework nucfd_test_flags)
 
 function(define_test suite test_name)
   add_executable(${test_name} ${test_name}.f90)
   target_link_libraries(${test_name} nucfd)
-  target_link_libraries(${test_name} nucfd_test_framework)
+  target_link_libraries(${test_name} $<TARGET_OBJECTS:nucfd_test_framework>)
   target_link_libraries(${test_name} nucfd_test_flags)
   add_test(NAME ${suite}:${test_name} COMMAND ${test_name})
 endfunction()
